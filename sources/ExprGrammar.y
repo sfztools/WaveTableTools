@@ -37,7 +37,7 @@
 
 %destructor { delete $$.e; } expr
 
-%token SEMICOLON OPEN CLOSE NUMBER VARX INVALID END UNOP
+%token SEMICOLON SHARP OPEN CLOSE NUMBER VARX INVALID END UNOP
 %left PLUS MINUS
 %nonassoc EQUAL NOTEQUAL LT GT LE GE
 %left TIMES DIVIDE MODULO
@@ -53,6 +53,7 @@ input2exp: SEMICOLON expr    { parser_result->expr[1].reset($2.e); $2.e = nullpt
 
 expr : NUMBER                { $$.e = new Number($1.n); }
      | VARX                  { $$.e = new VarX; }
+     | SHARP                 { $$.e = new Random; }
      | OPEN expr CLOSE       { $$.e = $2.e; $2.e = nullptr; }
      | PLUS expr %prec UNOP  { $$.e = $2.e; $2.e = nullptr; }
      | MINUS expr %prec UNOP { $$.e = new Sub(ExprPtr(new Number(0)), takeExpr($2)); }

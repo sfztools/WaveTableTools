@@ -13,6 +13,7 @@
 
 [ \t]+                ;
 ";"                   return SEMICOLON;
+"#"                   return SHARP;
 "("                   return OPEN;
 ")"                   return CLOSE;
 "x"                   return VARX;
