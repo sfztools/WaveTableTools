@@ -17,7 +17,7 @@
 "("                   return OPEN;
 ")"                   return CLOSE;
 "x"                   return VARX;
--?[0-9]+(\.[0-9]*)?   yylval->n = atof(yytext); return NUMBER;
+[0-9]+(\.[0-9]*)?     yylval->n = atof(yytext); return NUMBER;
 "+"                   return PLUS;
 "-"                   return MINUS;
 "*"                   return TIMES;
