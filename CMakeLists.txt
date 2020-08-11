@@ -13,6 +13,9 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(sndfile "sndfile" REQUIRED IMPORTED_TARGET)
 
 #
+include(GNUInstallDirs)
+
+#
 add_executable(WCreate
   "sources/WCreate.cpp"
   "sources/Expr.h"
@@ -61,3 +64,6 @@ if(FLEX_PROGRAM AND BISON_PROGRAM)
     BYPRODUCTS "${PROJECT_SOURCE_DIR}/sources/ExprGrammar.yy.h"
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/sources")
 endif()
+
+#
+install(TARGETS WCreate WMorph RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
