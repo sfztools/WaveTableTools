@@ -91,7 +91,6 @@ static bool fill_spectrum_in_partials_mode(const char *text, kiss_fft_cpx *spect
     };
 
     static auto extract_number = +[](const char *&pos, float &num) -> bool {
-        skip_ws(pos);
         unsigned count;
         if (sscanf(pos, "%f%n", &num, &count) != 1)
             return false;
@@ -100,7 +99,6 @@ static bool fill_spectrum_in_partials_mode(const char *text, kiss_fft_cpx *spect
     };
 
     static auto extract_char = +[](const char *&pos, char ch) -> bool {
-        skip_ws(pos);
         if (*pos != ch)
             return false;
         ++pos;
@@ -110,23 +108,24 @@ static bool fill_spectrum_in_partials_mode(const char *text, kiss_fft_cpx *spect
     //
     fill_index = 0;
     for (unsigned i = 1; i < size / 2 + 1; ++i) {
+        skip_ws(pos);
         if (i > 1) {
             if (!extract_char(pos, ','))
                 break;
         }
-        if (!extract_number(pos, spectrum[i].r))
-            return false;
+        extract_number(pos, spectrum[i].r);
     }
 
     //
+    skip_ws(pos);
     if (extract_char(pos, ';')) {
         for (unsigned i = 1; i < size / 2 + 1; ++i) {
+            skip_ws(pos);
             if (i > 1) {
                 if (!extract_char(pos, ','))
                     break;
             }
-            if (!extract_number(pos, spectrum[i].i))
-                return false;
+            extract_number(pos, spectrum[i].i);
         }
     }
 
