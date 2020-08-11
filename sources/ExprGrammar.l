@@ -12,6 +12,7 @@
 %%
 
 [ \t]+                ;
+";"                   return SEMICOLON;
 "("                   return OPEN;
 ")"                   return CLOSE;
 "x"                   return VARX;

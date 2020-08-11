@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <array>
 #include <memory>
 #include <iosfwd>
 
@@ -35,7 +36,7 @@ protected:
 public:
     virtual ~Expr() {}
     virtual void repr(std::ostream &out) const = 0;
-    static ExprPtr parse(const char *text);
+    static std::array<ExprPtr, 2> parse(const char *text);
     virtual float evalInterpreted(float x) const = 0;
     Type type;
 };

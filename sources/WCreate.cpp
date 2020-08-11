@@ -70,11 +70,14 @@ static bool parse_args(int argc, char *argv[])
     return true;
 }
 
-static void fill_spectrum_in_series_mode(const Expr &expr, kiss_fft_cpx *spectrum, unsigned size)
+static void fill_spectrum_in_series_mode(const Expr *expr1, const Expr *expr2, kiss_fft_cpx *spectrum, unsigned size)
 {
     for (unsigned i = 1; i < size / 2 + 1; ++i) {
-        float y = expr.evalInterpreted(i);
-        cfloat bin = std::polar(0.5f * y, float(-M_PI / 2));
+        float mod = expr1->evalInterpreted(i);
+        float arg = 0.0;
+        if (expr2)
+            arg = expr2->evalInterpreted(i) * float(M_PI * 2);
+        cfloat bin = std::polar(0.5f * mod, float(-M_PI / 2) + arg);
         spectrum[i].r = bin.real();
         spectrum[i].i = bin.imag();
     }
@@ -137,8 +140,8 @@ static bool fill_spectrum_in_partials_mode(const char *text, kiss_fft_cpx *spect
     //
     for (unsigned i = 1; i < size / 2 + 1; ++i) {
         float mod = spectrum[i].r;
-        float arg = spectrum[i].i;
-        cfloat bin = std::polar(0.5f * mod, float(-M_PI / 2) + arg * float(M_PI * 2));
+        float arg = spectrum[i].i * float(M_PI * 2);
+        cfloat bin = std::polar(0.5f * mod, float(-M_PI / 2) + arg);
         spectrum[i].r = bin.real();
         spectrum[i].i = bin.imag();
     }
@@ -162,9 +165,9 @@ int main(int argc, char *argv[])
 
     random_seed(default_seed);
 
-    ExprPtr expr = Expr::parse(expression);
-    if (expr) {
-        fill_spectrum_in_series_mode(*expr, spectrum.data(), wt.frames);
+    std::array<ExprPtr, 2> expr = Expr::parse(expression);
+    if (expr[0]) {
+        fill_spectrum_in_series_mode(expr[0].get(), expr[1].get(), spectrum.data(), wt.frames);
     }
     else if (!fill_spectrum_in_partials_mode(expression, spectrum.data(), wt.frames)) {
         std::cerr << "Invalid expression\n";

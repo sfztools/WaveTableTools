@@ -6,7 +6,7 @@
 #include <cmath>
 
 ///
-ExprPtr Expr::parse(const char *text)
+std::array<ExprPtr, 2> Expr::parse(const char *text)
 {
     yyscan_t scanner;
     YY_BUFFER_STATE buffer;
