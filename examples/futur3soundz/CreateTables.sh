@@ -1,5 +1,6 @@
 #!/bin/sh
 # A shell script conversion of the generator from futur3soundz WTableTools_101.zip
+# SPDX-License-Identifier: proprietary
 
 set -e
 set -x
