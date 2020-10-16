@@ -24,6 +24,8 @@ add_executable(WCreate
   "sources/Random.cpp"
   "sources/Wavetable.h"
   "sources/Wavetable.cpp"
+  "sources/WaveFormula.h"
+  "sources/WaveFormula.cpp"
   "sources/ExprGrammar.tab.cpp"
   "sources/ExprGrammar.tab.h"
   "sources/ExprGrammar.yy.cpp"

@@ -1,6 +1,7 @@
 #include "Expr.h"
 #include "Random.h"
 #include "Wavetable.h"
+#include "WaveFormula.h"
 #include <kiss_fftr.h>
 #include <iostream>
 #include <vector>
@@ -65,85 +66,6 @@ static bool parse_args(int argc, char *argv[])
     if (table_size <= 0 || table_size > 8192 || (table_size & 1)) {
         std::cerr << "Invalid table size\n";
         return false;
-    }
-
-    return true;
-}
-
-static void fill_spectrum_in_series_mode(const Expr *expr1, const Expr *expr2, kiss_fft_cpx *spectrum, unsigned size)
-{
-    for (unsigned i = 1; i < size / 2 + 1; ++i) {
-        float mod = expr1->evalInterpreted(i);
-        float arg = 0.0;
-        if (expr2)
-            arg = expr2->evalInterpreted(i) * float(M_PI * 2);
-        cfloat bin = std::polar(0.5f * mod, float(-M_PI / 2) + arg);
-        spectrum[i].r = bin.real();
-        spectrum[i].i = bin.imag();
-    }
-}
-
-static bool fill_spectrum_in_partials_mode(const char *text, kiss_fft_cpx *spectrum, unsigned size)
-{
-    unsigned fill_index;
-    const char *pos = text;
-
-    //
-    static auto skip_ws = +[](const char *&pos) {
-        for (char c; (c = *pos) != '\0' && (c == ' ' || c == '\t'); ++pos);
-    };
-
-    static auto extract_number = +[](const char *&pos, float &num) -> bool {
-        unsigned count;
-        if (sscanf(pos, "%f%n", &num, &count) != 1)
-            return false;
-        pos += count;
-        return true;
-    };
-
-    static auto extract_char = +[](const char *&pos, char ch) -> bool {
-        if (*pos != ch)
-            return false;
-        ++pos;
-        return true;
-    };
-
-    //
-    fill_index = 0;
-    for (unsigned i = 1; i < size / 2 + 1; ++i) {
-        skip_ws(pos);
-        if (i > 1) {
-            if (!extract_char(pos, ','))
-                break;
-        }
-        extract_number(pos, spectrum[i].r);
-    }
-
-    //
-    skip_ws(pos);
-    if (extract_char(pos, ';')) {
-        for (unsigned i = 1; i < size / 2 + 1; ++i) {
-            skip_ws(pos);
-            if (i > 1) {
-                if (!extract_char(pos, ','))
-                    break;
-            }
-            extract_number(pos, spectrum[i].i);
-        }
-    }
-
-    //
-    skip_ws(pos);
-    if (*pos != '\0')
-        return false;
-
-    //
-    for (unsigned i = 1; i < size / 2 + 1; ++i) {
-        float mod = spectrum[i].r;
-        float arg = spectrum[i].i * float(M_PI * 2);
-        cfloat bin = std::polar(0.5f * mod, float(-M_PI / 2) + arg);
-        spectrum[i].r = bin.real();
-        spectrum[i].i = bin.imag();
     }
 
     return true;
@@ -229,6 +151,25 @@ static void display_wave(const float* data, unsigned size, int rows, int cols)
     fputs(text.get(), stdout);
 }
 
+WaveFormulaPtr create_formula(const char* expr)
+{
+    WaveFormulaPtr formula;
+
+    if (!formula) {
+        formula.reset(new SeriesFormula(expr));
+        if (!formula->is_valid())
+            formula.reset();
+    }
+
+    if (!formula) {
+        formula.reset(new PartialsFormula(expr));
+        if (!formula->is_valid())
+            formula.reset();
+    }
+
+    return formula;
+}
+
 int main(int argc, char *argv[])
 {
     if (!parse_args(argc, argv))
@@ -245,30 +186,17 @@ int main(int argc, char *argv[])
 
     random_seed(default_seed);
 
-    std::array<ExprPtr, 2> expr = Expr::parse(expression);
-    if (expr[0]) {
-        fill_spectrum_in_series_mode(expr[0].get(), expr[1].get(), spectrum.data(), wt.frames);
-    }
-    else if (!fill_spectrum_in_partials_mode(expression, spectrum.data(), wt.frames)) {
+    WaveFormulaPtr formula = create_formula(expression);
+    if (!formula) {
         std::cerr << "Invalid expression\n";
         return 1;
     }
+    formula->set_size(wt.frames);
+    formula->set_normalized(true);
 
     //
-    kiss_fftr_cfg cfg = kiss_fftr_alloc(table_size, 1, nullptr, nullptr);
-    if (!cfg)
-        throw std::bad_alloc();
-    kiss_fftri(cfg, spectrum.data(), wt.data.get());
-    kiss_fftr_free(cfg);
-
-    // normalize to unity
-    float maxAmplitude = 0.0;
-    for (unsigned i = 0; i < wt.frames; ++i)
-        maxAmplitude = std::max(std::fabs(wt.data[i]), maxAmplitude);
-    if (maxAmplitude > 0.0f) {
-        for (unsigned i = 0; i < wt.frames; ++i)
-            wt.data[i] = clamp(wt.data[i] / maxAmplitude, -1.0f, 1.0f);
-    }
+    const float* wave = formula->get_wave();
+    std::copy(wave, wave + wt.frames, wt.data.get());
 
     //
     if (1)
