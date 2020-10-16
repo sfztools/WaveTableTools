@@ -204,7 +204,7 @@ std::complex<float>* PartialsFormula::parse(const char* text, unsigned* num_part
             }
             float value = 0.0f;
             extract_number(pos, value);
-            phase.push_back(value);
+            phase.push_back(value * float(M_PI / 2));
         }
     }
 
