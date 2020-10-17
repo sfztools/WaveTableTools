@@ -256,9 +256,7 @@ void yyfree ( void * , yyscan_t yyscanner );
 #include <unistd.h>
 #endif
 
-#ifndef YY_EXTRA_TYPE
-#define YY_EXTRA_TYPE void *
-#endif
+#define YY_EXTRA_TYPE struct SeriesExprGrammarExtra *
 
 int yylex_init (yyscan_t* scanner);
 
@@ -516,8 +514,8 @@ extern int yylex \
 #undef yyTABLES_NAME
 #endif
 
-#line 37 "SeriesExprGrammar.l"
+#line 52 "SeriesExprGrammar.l"
 
-#line 521 "SeriesExprGrammar.yy.h"
+#line 519 "SeriesExprGrammar.yy.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */

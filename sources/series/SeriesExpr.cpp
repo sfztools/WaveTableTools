@@ -2,6 +2,7 @@
 #include "Random.h"
 #include "SeriesExprGrammar.tab.h"
 #include "SeriesExprGrammar.yy.h"
+#include "SeriesExprGrammarExtra.h"
 #include <iostream>
 #include <cmath>
 
@@ -12,8 +13,20 @@ std::array<ExprPtr, 2> Expr::parse(const char *text)
     YY_BUFFER_STATE buffer;
     ParserResult result;
 
+#if !defined(_WIN32)
+    Locale c_locale(newlocale(LC_ALL_MASK, "C", (locale_t)0));
+#else
+    Locale c_locale(_create_locale(LC_ALL, "C"));
+#endif
+    if (!c_locale)
+        throw std::system_error(errno, std::generic_category());
+
     if (yylex_init(&scanner) != 0)
         goto end1;
+
+    SeriesExprGrammarExtra extra;
+    extra.c_locale = *c_locale;
+    yyset_extra(&extra, scanner);
 
 #if YYDEBUG
     yydebug = 1;

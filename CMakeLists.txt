@@ -30,6 +30,7 @@ add_executable(WCreate
   "sources/series/SeriesExprGrammar.tab.h"
   "sources/series/SeriesExprGrammar.yy.cpp"
   "sources/series/SeriesExprGrammar.yy.h"
+  "sources/series/SeriesExprGrammarExtra.h"
   "sources/utility/Locale.h")
 #if(TRUE)
 #  target_compile_definitions(WCreate PRIVATE

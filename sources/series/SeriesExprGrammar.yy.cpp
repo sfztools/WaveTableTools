@@ -488,12 +488,26 @@ static const flex_int32_t yy_rule_can_match_eol[24] =
 #line 1 "SeriesExprGrammar.l"
 #define YY_NO_INPUT 1
 /* %option debug */
-#line 7 "SeriesExprGrammar.l"
+#line 8 "SeriesExprGrammar.l"
   #include <stdlib.h>
   #include <string.h>
   #include "SeriesExprGrammar.tab.h"
-#line 495 "SeriesExprGrammar.yy.cpp"
-#line 496 "SeriesExprGrammar.yy.cpp"
+  #include "SeriesExprGrammarExtra.h"
+
+  static double to_number(const char *text, Locale::handle_type loc)
+  {
+    double number;
+#if !defined(_WIN32)
+    loc = uselocale(loc);
+    number = atof(text);
+    uselocale(loc);
+#else
+    return _atof_l(text, loc);
+#endif
+    return number;
+  }
+#line 509 "SeriesExprGrammar.yy.cpp"
+#line 510 "SeriesExprGrammar.yy.cpp"
 
 #define INITIAL 0
 
@@ -505,9 +519,7 @@ static const flex_int32_t yy_rule_can_match_eol[24] =
 #include <unistd.h>
 #endif
 
-#ifndef YY_EXTRA_TYPE
-#define YY_EXTRA_TYPE void *
-#endif
+#define YY_EXTRA_TYPE struct SeriesExprGrammarExtra *
 
 /* Holds the entire state of the reentrant scanner. */
 struct yyguts_t
@@ -775,10 +787,10 @@ YY_DECL
 		}
 
 	{
-#line 12 "SeriesExprGrammar.l"
+#line 27 "SeriesExprGrammar.l"
 
 
-#line 781 "SeriesExprGrammar.yy.cpp"
+#line 793 "SeriesExprGrammar.yy.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -849,125 +861,125 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 14 "SeriesExprGrammar.l"
+#line 29 "SeriesExprGrammar.l"
 ;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 15 "SeriesExprGrammar.l"
+#line 30 "SeriesExprGrammar.l"
 return SEMICOLON;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 16 "SeriesExprGrammar.l"
+#line 31 "SeriesExprGrammar.l"
 return SHARP;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 17 "SeriesExprGrammar.l"
+#line 32 "SeriesExprGrammar.l"
 return OPEN;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 18 "SeriesExprGrammar.l"
+#line 33 "SeriesExprGrammar.l"
 return CLOSE;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 19 "SeriesExprGrammar.l"
+#line 34 "SeriesExprGrammar.l"
 return VARX;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 20 "SeriesExprGrammar.l"
-yylval->n = atof(yytext); return NUMBER;
+#line 35 "SeriesExprGrammar.l"
+yylval->n = to_number(yytext, yyextra->c_locale); return NUMBER;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 21 "SeriesExprGrammar.l"
+#line 36 "SeriesExprGrammar.l"
 return PLUS;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 22 "SeriesExprGrammar.l"
+#line 37 "SeriesExprGrammar.l"
 return MINUS;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 23 "SeriesExprGrammar.l"
+#line 38 "SeriesExprGrammar.l"
 return TIMES;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 24 "SeriesExprGrammar.l"
+#line 39 "SeriesExprGrammar.l"
 return DIVIDE;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 25 "SeriesExprGrammar.l"
+#line 40 "SeriesExprGrammar.l"
 return MODULO;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 26 "SeriesExprGrammar.l"
+#line 41 "SeriesExprGrammar.l"
 return POWER;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 27 "SeriesExprGrammar.l"
+#line 42 "SeriesExprGrammar.l"
 return EQUAL;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 28 "SeriesExprGrammar.l"
+#line 43 "SeriesExprGrammar.l"
 return NOTEQUAL;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 29 "SeriesExprGrammar.l"
+#line 44 "SeriesExprGrammar.l"
 return LT;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 30 "SeriesExprGrammar.l"
+#line 45 "SeriesExprGrammar.l"
 return GT;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 31 "SeriesExprGrammar.l"
+#line 46 "SeriesExprGrammar.l"
 return LE;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 32 "SeriesExprGrammar.l"
+#line 47 "SeriesExprGrammar.l"
 return GE;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 33 "SeriesExprGrammar.l"
+#line 48 "SeriesExprGrammar.l"
 return OR;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 34 "SeriesExprGrammar.l"
+#line 49 "SeriesExprGrammar.l"
 return AND;
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 35 "SeriesExprGrammar.l"
+#line 50 "SeriesExprGrammar.l"
 return END;
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 36 "SeriesExprGrammar.l"
+#line 51 "SeriesExprGrammar.l"
 return INVALID;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 37 "SeriesExprGrammar.l"
+#line 52 "SeriesExprGrammar.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 970 "SeriesExprGrammar.yy.cpp"
+#line 982 "SeriesExprGrammar.yy.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2127,4 +2139,4 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 37 "SeriesExprGrammar.l"
+#line 52 "SeriesExprGrammar.l"
