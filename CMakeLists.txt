@@ -16,8 +16,7 @@ pkg_check_modules(sndfile "sndfile" REQUIRED IMPORTED_TARGET)
 include(GNUInstallDirs)
 
 #
-add_executable(WCreate
-  "sources/WCreate.cpp"
+add_library(WLib STATIC
   "sources/Random.h"
   "sources/Wavetable.h"
   "sources/Wavetable.cpp"
@@ -32,23 +31,20 @@ add_executable(WCreate
   "sources/series/SeriesExprGrammarExtra.h"
   "sources/utility/Locale.h")
 #if(TRUE)
-#  target_compile_definitions(WCreate PRIVATE
-#    "YYDEBUG=1")
+#  target_compile_definitions(WLib PRIVATE "YYDEBUG=1")
 #endif()
-target_include_directories(WCreate PRIVATE
+target_include_directories(WLib PUBLIC
   "sources")
-target_link_libraries(WCreate PRIVATE
+target_link_libraries(WLib PRIVATE
   sfizz-kissfft)
 
 #
-add_executable(WMorph
-  "sources/WMorph.cpp"
-  "sources/Wavetable.h"
-  "sources/Wavetable.cpp")
-target_include_directories(WMorph PRIVATE
-  "sources")
-target_link_libraries(WMorph PRIVATE
-  PkgConfig::sndfile)
+add_executable(WCreate "sources/WCreate.cpp")
+target_link_libraries(WCreate PRIVATE WLib)
+
+#
+add_executable(WMorph "sources/WMorph.cpp")
+target_link_libraries(WMorph PRIVATE WLib PkgConfig::sndfile)
 
 #
 find_program(FLEX_PROGRAM "flex")
