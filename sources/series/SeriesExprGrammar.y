@@ -9,7 +9,7 @@
 }
 
 %code requires {
-  #include "Expr.h"
+  #include "SeriesExpr.h"
 
   union sval {
       Expr *e;

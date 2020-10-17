@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.6.4.  */
+/* A Bison parser, made by GNU Bison 3.7.2.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
@@ -49,7 +49,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.6.4"
+#define YYBISON_VERSION "3.7.2"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -64,11 +64,11 @@
 #define YYPULL 1
 
 /* "%code top" blocks.  */
-#line 7 "ExprGrammar.y"
+#line 7 "SeriesExprGrammar.y"
 
   #include <stdio.h>
 
-#line 72 "ExprGrammar.tab.cpp"
+#line 72 "SeriesExprGrammar.tab.cpp"
 
 
 
@@ -94,97 +94,7 @@
 #  endif
 # endif
 
-/* Use api.header.include to #include this header
-   instead of duplicating it here.  */
-#ifndef YY_YY_EXPRGRAMMAR_TAB_H_INCLUDED
-# define YY_YY_EXPRGRAMMAR_TAB_H_INCLUDED
-/* Debug traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
-#if YYDEBUG
-extern int yydebug;
-#endif
-/* "%code requires" blocks.  */
-#line 11 "ExprGrammar.y"
-
-  #include "Expr.h"
-
-  union sval {
-      Expr *e;
-      double n;
-  };
-
-  struct ParserResult {
-      std::array<ExprPtr, 2> expr;
-  };
-
-  typedef void *yyscan_t;
-
-#line 125 "ExprGrammar.tab.cpp"
-
-/* Token kinds.  */
-#ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-  enum yytokentype
-  {
-    YYEMPTY = -2,
-    YYEOF = 0,                     /* "end of file"  */
-    YYerror = 256,                 /* error  */
-    YYUNDEF = 257,                 /* "invalid token"  */
-    SEMICOLON = 258,               /* SEMICOLON  */
-    SHARP = 259,                   /* SHARP  */
-    OPEN = 260,                    /* OPEN  */
-    CLOSE = 261,                   /* CLOSE  */
-    NUMBER = 262,                  /* NUMBER  */
-    VARX = 263,                    /* VARX  */
-    INVALID = 264,                 /* INVALID  */
-    END = 265,                     /* END  */
-    UNOP = 266,                    /* UNOP  */
-    PLUS = 267,                    /* PLUS  */
-    MINUS = 268,                   /* MINUS  */
-    EQUAL = 269,                   /* EQUAL  */
-    NOTEQUAL = 270,                /* NOTEQUAL  */
-    LT = 271,                      /* LT  */
-    GT = 272,                      /* GT  */
-    LE = 273,                      /* LE  */
-    GE = 274,                      /* GE  */
-    TIMES = 275,                   /* TIMES  */
-    DIVIDE = 276,                  /* DIVIDE  */
-    MODULO = 277,                  /* MODULO  */
-    AND = 278,                     /* AND  */
-    OR = 279,                      /* OR  */
-    POWER = 280                    /* POWER  */
-  };
-  typedef enum yytokentype yytoken_kind_t;
-#endif
-
-/* Value type.  */
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union sval YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
-# define YYSTYPE_IS_DECLARED 1
-#endif
-
-/* Location type.  */
-#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
-typedef struct YYLTYPE YYLTYPE;
-struct YYLTYPE
-{
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
-};
-# define YYLTYPE_IS_DECLARED 1
-# define YYLTYPE_IS_TRIVIAL 1
-#endif
-
-
-
-int yyparse (yyscan_t scanner, ParserResult *parser_result);
-
-#endif /* !YY_YY_EXPRGRAMMAR_TAB_H_INCLUDED  */
+#include "SeriesExprGrammar.tab.h"
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -225,7 +135,7 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 
 /* Unqualified %code blocks.  */
-#line 26 "ExprGrammar.y"
+#line 26 "SeriesExprGrammar.y"
 
   int yylex(YYSTYPE *yylvalp, YYLTYPE *yyllocp, yyscan_t scanner);
   void yyerror(YYLTYPE *yyllocp, yyscan_t unused, ParserResult *parser_result, const char *msg);
@@ -237,7 +147,7 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
       return e;
   }
 
-#line 241 "ExprGrammar.tab.cpp"
+#line 151 "SeriesExprGrammar.tab.cpp"
 
 #ifdef short
 # undef short
@@ -556,6 +466,7 @@ union yyalloc
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  46
 
+/* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   280
 
 
@@ -1034,10 +945,10 @@ yydestruct (const char *yymsg,
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   switch (yykind)
     {
-    case 29: /* expr  */
-#line 38 "ExprGrammar.y"
+    case YYSYMBOL_expr: /* expr  */
+#line 38 "SeriesExprGrammar.y"
             { delete (*yyvaluep).e; }
-#line 1041 "ExprGrammar.tab.cpp"
+#line 952 "SeriesExprGrammar.tab.cpp"
         break;
 
       default:
@@ -1058,7 +969,7 @@ yydestruct (const char *yymsg,
 int
 yyparse (yyscan_t scanner, ParserResult *parser_result)
 {
-/* The lookahead symbol.  */
+/* Lookahead token kind.  */
 int yychar;
 
 
@@ -1077,42 +988,37 @@ static YYLTYPE yyloc_default
 YYLTYPE yylloc = yyloc_default;
 
     /* Number of syntax errors so far.  */
-    int yynerrs;
+    int yynerrs = 0;
 
-    yy_state_fast_t yystate;
+    yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
-    int yyerrstatus;
+    int yyerrstatus = 0;
 
-    /* The stacks and their tools:
-       'yyss': related to states.
-       'yyvs': related to semantic values.
-       'yyls': related to locations.
-
-       Refer to the stacks through separate pointers, to allow yyoverflow
+    /* Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
 
     /* Their size.  */
-    YYPTRDIFF_T yystacksize;
+    YYPTRDIFF_T yystacksize = YYINITDEPTH;
 
-    /* The state stack.  */
+    /* The state stack: array, bottom, top.  */
     yy_state_t yyssa[YYINITDEPTH];
-    yy_state_t *yyss;
-    yy_state_t *yyssp;
+    yy_state_t *yyss = yyssa;
+    yy_state_t *yyssp = yyss;
 
-    /* The semantic value stack.  */
+    /* The semantic value stack: array, bottom, top.  */
     YYSTYPE yyvsa[YYINITDEPTH];
-    YYSTYPE *yyvs;
-    YYSTYPE *yyvsp;
+    YYSTYPE *yyvs = yyvsa;
+    YYSTYPE *yyvsp = yyvs;
 
-    /* The location stack.  */
+    /* The location stack: array, bottom, top.  */
     YYLTYPE yylsa[YYINITDEPTH];
-    YYLTYPE *yyls;
-    YYLTYPE *yylsp;
+    YYLTYPE *yyls = yylsa;
+    YYLTYPE *yylsp = yyls;
 
   int yyn;
   /* The return value of yyparse.  */
   int yyresult;
-  /* Lookahead token as an internal (translated) token number.  */
+  /* Lookahead symbol kind.  */
   yysymbol_kind_t yytoken = YYSYMBOL_YYEMPTY;
   /* The variables used to return semantic value and location from the
      action routines.  */
@@ -1129,16 +1035,6 @@ YYLTYPE yylloc = yyloc_default;
   /* The number of symbols on the RHS of the reduced rule.
      Keep to zero when no symbol should be popped.  */
   int yylen = 0;
-
-  yynerrs = 0;
-  yystate = 0;
-  yyerrstatus = 0;
-
-  yystacksize = YYINITDEPTH;
-  yyssp = yyss = yyssa;
-  yyvsp = yyvs = yyvsa;
-  yylsp = yyls = yylsa;
-
 
   YYDPRINTF ((stderr, "Starting parse\n"));
 
@@ -1350,146 +1246,146 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 2:
-#line 50 "ExprGrammar.y"
+  case 2: /* input: expr input2exp END  */
+#line 50 "SeriesExprGrammar.y"
                              { parser_result->expr[0].reset(yyvsp[-2].e); yyvsp[-2].e = nullptr; }
-#line 1357 "ExprGrammar.tab.cpp"
+#line 1253 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 3:
-#line 51 "ExprGrammar.y"
+  case 3: /* input2exp: SEMICOLON expr  */
+#line 51 "SeriesExprGrammar.y"
                              { parser_result->expr[1].reset(yyvsp[0].e); yyvsp[0].e = nullptr; }
-#line 1363 "ExprGrammar.tab.cpp"
+#line 1259 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 4:
-#line 52 "ExprGrammar.y"
+  case 4: /* input2exp: %empty  */
+#line 52 "SeriesExprGrammar.y"
                              { }
-#line 1369 "ExprGrammar.tab.cpp"
+#line 1265 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 5:
-#line 54 "ExprGrammar.y"
+  case 5: /* expr: NUMBER  */
+#line 54 "SeriesExprGrammar.y"
                              { yyval.e = new Number(yyvsp[0].n); }
-#line 1375 "ExprGrammar.tab.cpp"
+#line 1271 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 6:
-#line 55 "ExprGrammar.y"
+  case 6: /* expr: VARX  */
+#line 55 "SeriesExprGrammar.y"
                              { yyval.e = new VarX; }
-#line 1381 "ExprGrammar.tab.cpp"
+#line 1277 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 7:
-#line 56 "ExprGrammar.y"
+  case 7: /* expr: SHARP  */
+#line 56 "SeriesExprGrammar.y"
                              { yyval.e = new Random; }
-#line 1387 "ExprGrammar.tab.cpp"
+#line 1283 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 8:
-#line 57 "ExprGrammar.y"
+  case 8: /* expr: OPEN expr CLOSE  */
+#line 57 "SeriesExprGrammar.y"
                              { yyval.e = yyvsp[-1].e; yyvsp[-1].e = nullptr; }
-#line 1393 "ExprGrammar.tab.cpp"
+#line 1289 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 9:
-#line 58 "ExprGrammar.y"
+  case 9: /* expr: PLUS expr  */
+#line 58 "SeriesExprGrammar.y"
                              { yyval.e = yyvsp[0].e; yyvsp[0].e = nullptr; }
-#line 1399 "ExprGrammar.tab.cpp"
+#line 1295 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 10:
-#line 59 "ExprGrammar.y"
+  case 10: /* expr: MINUS expr  */
+#line 59 "SeriesExprGrammar.y"
                              { yyval.e = new Sub(ExprPtr(new Number(0)), takeExpr(yyvsp[0])); }
-#line 1405 "ExprGrammar.tab.cpp"
+#line 1301 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 11:
-#line 60 "ExprGrammar.y"
+  case 11: /* expr: expr PLUS expr  */
+#line 60 "SeriesExprGrammar.y"
                              { yyval.e = new Add(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1411 "ExprGrammar.tab.cpp"
+#line 1307 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 12:
-#line 61 "ExprGrammar.y"
+  case 12: /* expr: expr MINUS expr  */
+#line 61 "SeriesExprGrammar.y"
                              { yyval.e = new Sub(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1417 "ExprGrammar.tab.cpp"
+#line 1313 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 13:
-#line 62 "ExprGrammar.y"
+  case 13: /* expr: expr TIMES expr  */
+#line 62 "SeriesExprGrammar.y"
                              { yyval.e = new Mul(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1423 "ExprGrammar.tab.cpp"
+#line 1319 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 14:
-#line 63 "ExprGrammar.y"
+  case 14: /* expr: expr DIVIDE expr  */
+#line 63 "SeriesExprGrammar.y"
                              { yyval.e = new Div(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1429 "ExprGrammar.tab.cpp"
+#line 1325 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 15:
-#line 64 "ExprGrammar.y"
+  case 15: /* expr: expr MODULO expr  */
+#line 64 "SeriesExprGrammar.y"
                              { yyval.e = new Mod(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1435 "ExprGrammar.tab.cpp"
+#line 1331 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 16:
-#line 65 "ExprGrammar.y"
+  case 16: /* expr: expr POWER expr  */
+#line 65 "SeriesExprGrammar.y"
                              { yyval.e = new Pow(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1441 "ExprGrammar.tab.cpp"
+#line 1337 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 17:
-#line 66 "ExprGrammar.y"
+  case 17: /* expr: expr EQUAL expr  */
+#line 66 "SeriesExprGrammar.y"
                              { yyval.e = new Eq(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1447 "ExprGrammar.tab.cpp"
+#line 1343 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 18:
-#line 67 "ExprGrammar.y"
+  case 18: /* expr: expr NOTEQUAL expr  */
+#line 67 "SeriesExprGrammar.y"
                              { yyval.e = new Neq(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1453 "ExprGrammar.tab.cpp"
+#line 1349 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 19:
-#line 68 "ExprGrammar.y"
+  case 19: /* expr: expr LT expr  */
+#line 68 "SeriesExprGrammar.y"
                              { yyval.e = new Lt(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1459 "ExprGrammar.tab.cpp"
+#line 1355 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 20:
-#line 69 "ExprGrammar.y"
+  case 20: /* expr: expr GT expr  */
+#line 69 "SeriesExprGrammar.y"
                              { yyval.e = new Gt(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1465 "ExprGrammar.tab.cpp"
+#line 1361 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 21:
-#line 70 "ExprGrammar.y"
+  case 21: /* expr: expr LE expr  */
+#line 70 "SeriesExprGrammar.y"
                              { yyval.e = new Le(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1471 "ExprGrammar.tab.cpp"
+#line 1367 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 22:
-#line 71 "ExprGrammar.y"
+  case 22: /* expr: expr GE expr  */
+#line 71 "SeriesExprGrammar.y"
                              { yyval.e = new Ge(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1477 "ExprGrammar.tab.cpp"
+#line 1373 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 23:
-#line 72 "ExprGrammar.y"
+  case 23: /* expr: expr AND expr  */
+#line 72 "SeriesExprGrammar.y"
                              { yyval.e = new And(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1483 "ExprGrammar.tab.cpp"
+#line 1379 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 24:
-#line 73 "ExprGrammar.y"
+  case 24: /* expr: expr OR expr  */
+#line 73 "SeriesExprGrammar.y"
                              { yyval.e = new Or(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1489 "ExprGrammar.tab.cpp"
+#line 1385 "SeriesExprGrammar.tab.cpp"
     break;
 
 
-#line 1493 "ExprGrammar.tab.cpp"
+#line 1389 "SeriesExprGrammar.tab.cpp"
 
       default: break;
     }
@@ -1654,13 +1550,13 @@ yyabortlab:
 yyexhaustedlab:
   yyerror (&yylloc, scanner, parser_result, YY_("memory exhausted"));
   yyresult = 2;
-  /* Fall through.  */
+  goto yyreturn;
 #endif
 
 
-/*-----------------------------------------------------.
-| yyreturn -- parsing is finished, return the result.  |
-`-----------------------------------------------------*/
+/*-------------------------------------------------------.
+| yyreturn -- parsing is finished, clean up and return.  |
+`-------------------------------------------------------*/
 yyreturn:
   if (yychar != YYEMPTY)
     {
@@ -1688,7 +1584,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 75 "ExprGrammar.y"
+#line 75 "SeriesExprGrammar.y"
 
 
 void yyerror(YYLTYPE *yyllocp, yyscan_t unused, ParserResult *parser_result, const char *msg)

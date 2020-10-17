@@ -18,18 +18,18 @@ include(GNUInstallDirs)
 #
 add_executable(WCreate
   "sources/WCreate.cpp"
-  "sources/Expr.h"
-  "sources/Expr.cpp"
   "sources/Random.h"
   "sources/Random.cpp"
   "sources/Wavetable.h"
   "sources/Wavetable.cpp"
   "sources/WaveFormula.h"
   "sources/WaveFormula.cpp"
-  "sources/ExprGrammar.tab.cpp"
-  "sources/ExprGrammar.tab.h"
-  "sources/ExprGrammar.yy.cpp"
-  "sources/ExprGrammar.yy.h"
+  "sources/series/SeriesExpr.h"
+  "sources/series/SeriesExpr.cpp"
+  "sources/series/SeriesExprGrammar.tab.cpp"
+  "sources/series/SeriesExprGrammar.tab.h"
+  "sources/series/SeriesExprGrammar.yy.cpp"
+  "sources/series/SeriesExprGrammar.yy.h"
   "sources/utility/Locale.h")
 #if(TRUE)
 #  target_compile_definitions(WCreate PRIVATE
@@ -55,17 +55,17 @@ find_program(FLEX_PROGRAM "flex")
 find_program(BISON_PROGRAM "bison")
 if(FLEX_PROGRAM AND BISON_PROGRAM)
   add_custom_command(
-    OUTPUT "${PROJECT_SOURCE_DIR}/sources/ExprGrammar.tab.cpp"
-    COMMAND "${BISON_PROGRAM}" "--output=ExprGrammar.tab.cpp" "--defines=ExprGrammar.tab.h" "ExprGrammar.y"
-    DEPENDS "${PROJECT_SOURCE_DIR}/sources/ExprGrammar.y"
-    BYPRODUCTS "${PROJECT_SOURCE_DIR}/sources/ExprGrammar.tab.h"
-    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/sources")
+    OUTPUT "${PROJECT_SOURCE_DIR}/sources/series/SeriesExprGrammar.tab.cpp"
+    COMMAND "${BISON_PROGRAM}" "--output=SeriesExprGrammar.tab.cpp" "--defines=SeriesExprGrammar.tab.h" "SeriesExprGrammar.y"
+    DEPENDS "${PROJECT_SOURCE_DIR}/sources/series/SeriesExprGrammar.y"
+    BYPRODUCTS "${PROJECT_SOURCE_DIR}/sources/series/SeriesExprGrammar.tab.h"
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/sources/series")
   add_custom_command(
-    OUTPUT "${PROJECT_SOURCE_DIR}/sources/ExprGrammar.yy.cpp"
-    COMMAND "${FLEX_PROGRAM}" "--outfile=ExprGrammar.yy.cpp" "--header-file=ExprGrammar.yy.h" "ExprGrammar.l"
-    DEPENDS "${PROJECT_SOURCE_DIR}/sources/ExprGrammar.l"
-    BYPRODUCTS "${PROJECT_SOURCE_DIR}/sources/ExprGrammar.yy.h"
-    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/sources")
+    OUTPUT "${PROJECT_SOURCE_DIR}/sources/series/SeriesExprGrammar.yy.cpp"
+    COMMAND "${FLEX_PROGRAM}" "--outfile=SeriesExprGrammar.yy.cpp" "--header-file=SeriesExprGrammar.yy.h" "SeriesExprGrammar.l"
+    DEPENDS "${PROJECT_SOURCE_DIR}/sources/series/SeriesExprGrammar.l"
+    BYPRODUCTS "${PROJECT_SOURCE_DIR}/sources/series/SeriesExprGrammar.yy.h"
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/sources/series")
 endif()
 
 #

@@ -1,7 +1,7 @@
-#include "Expr.h"
+#include "SeriesExpr.h"
 #include "Random.h"
-#include "ExprGrammar.tab.h"
-#include "ExprGrammar.yy.h"
+#include "SeriesExprGrammar.tab.h"
+#include "SeriesExprGrammar.yy.h"
 #include <iostream>
 #include <cmath>
 

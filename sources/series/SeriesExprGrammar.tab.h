@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.6.4.  */
+/* A Bison parser, made by GNU Bison 3.7.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_EXPRGRAMMAR_TAB_H_INCLUDED
-# define YY_YY_EXPRGRAMMAR_TAB_H_INCLUDED
+#ifndef YY_YY_SERIESEXPRGRAMMAR_TAB_H_INCLUDED
+# define YY_YY_SERIESEXPRGRAMMAR_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -45,9 +45,9 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 11 "ExprGrammar.y"
+#line 11 "SeriesExprGrammar.y"
 
-  #include "Expr.h"
+  #include "SeriesExpr.h"
 
   union sval {
       Expr *e;
@@ -60,7 +60,7 @@ extern int yydebug;
 
   typedef void *yyscan_t;
 
-#line 64 "ExprGrammar.tab.h"
+#line 64 "SeriesExprGrammar.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -123,4 +123,4 @@ struct YYLTYPE
 
 int yyparse (yyscan_t scanner, ParserResult *parser_result);
 
-#endif /* !YY_YY_EXPRGRAMMAR_TAB_H_INCLUDED  */
+#endif /* !YY_YY_SERIESEXPRGRAMMAR_TAB_H_INCLUDED  */

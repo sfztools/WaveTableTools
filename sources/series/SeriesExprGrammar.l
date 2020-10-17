@@ -6,7 +6,7 @@
 %{
   #include <stdlib.h>
   #include <string.h>
-  #include "ExprGrammar.tab.h"
+  #include "SeriesExprGrammar.tab.h"
 %}
 
 %%

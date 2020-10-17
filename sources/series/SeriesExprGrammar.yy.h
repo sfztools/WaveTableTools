@@ -2,9 +2,9 @@
 #define yyHEADER_H 1
 #define yyIN_HEADER 1
 
-#line 5 "ExprGrammar.yy.h"
+#line 5 "SeriesExprGrammar.yy.h"
 
-#line 7 "ExprGrammar.yy.h"
+#line 7 "SeriesExprGrammar.yy.h"
 
 #define  YY_INT_ALIGNED short int
 
@@ -516,8 +516,8 @@ extern int yylex \
 #undef yyTABLES_NAME
 #endif
 
-#line 37 "ExprGrammar.l"
+#line 37 "SeriesExprGrammar.l"
 
-#line 521 "ExprGrammar.yy.h"
+#line 521 "SeriesExprGrammar.yy.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */
