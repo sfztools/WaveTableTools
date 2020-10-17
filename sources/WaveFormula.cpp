@@ -1,9 +1,13 @@
 #include "WaveFormula.h"
+#include "utility/Locale.h"
 #include <kiss_fftr.h>
 #include <algorithm>
 #include <type_traits>
+#include <system_error>
 #include <stdexcept>
 #include <cmath>
+#include <clocale>
+#include <cerrno>
 
 void WaveFormula::set_size(unsigned size)
 {
@@ -155,6 +159,15 @@ std::complex<float>* PartialsFormula::parse(const char* text, unsigned* num_part
     phase.reserve(64);
 
     //
+#if !defined(_WIN32)
+    Locale c_locale(newlocale(LC_ALL_MASK, "C", (locale_t)0));
+#else
+    Locale c_locale(_create_locale(LC_ALL, "C"));
+#endif
+    if (!c_locale)
+        throw std::system_error(errno, std::generic_category());
+
+    //
     static auto skip_ws = +[](const char *&pos) {
         auto is_ws = [](char c) -> bool {
             return c == ' ' || c == '\t' || c == '\r' || c == '\n';
@@ -162,9 +175,16 @@ std::complex<float>* PartialsFormula::parse(const char* text, unsigned* num_part
         for (char c; (c = *pos) != '\0' && is_ws(c); ++pos);
     };
 
-    static auto extract_number = +[](const char *&pos, float &num) -> bool {
+    static auto extract_number = +[](const char *&pos, float &num, Locale::handle_type loc) -> bool {
         unsigned count;
-        if (sscanf(pos, "%f%n", &num, &count) != 1)
+#if !defined(_WIN32)
+        loc = uselocale(loc);
+        int ret = sscanf(pos, "%f%n", &num, &count);
+        uselocale(loc);
+#else
+        int ret = _sscanf_l(pos, "%f%n", loc, &num, &count);
+#endif
+        if (ret != 1)
             return false;
         pos += count;
         return true;
@@ -189,7 +209,7 @@ std::complex<float>* PartialsFormula::parse(const char* text, unsigned* num_part
                 break;
         }
         float value = 0.0f;
-        extract_number(pos, value);
+        extract_number(pos, value, *c_locale);
         mag.push_back(value);
     }
 
@@ -203,7 +223,7 @@ std::complex<float>* PartialsFormula::parse(const char* text, unsigned* num_part
                     break;
             }
             float value = 0.0f;
-            extract_number(pos, value);
+            extract_number(pos, value, *c_locale);
             phase.push_back(value * float(M_PI / 2));
         }
     }

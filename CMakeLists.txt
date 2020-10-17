@@ -29,7 +29,8 @@ add_executable(WCreate
   "sources/ExprGrammar.tab.cpp"
   "sources/ExprGrammar.tab.h"
   "sources/ExprGrammar.yy.cpp"
-  "sources/ExprGrammar.yy.h")
+  "sources/ExprGrammar.yy.h"
+  "sources/utility/Locale.h")
 #if(TRUE)
 #  target_compile_definitions(WCreate PRIVATE
 #    "YYDEBUG=1")
