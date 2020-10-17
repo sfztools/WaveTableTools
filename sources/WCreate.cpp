@@ -184,8 +184,6 @@ int main(int argc, char *argv[])
     //
     std::vector<kiss_fft_cpx> spectrum(wt.frames / 2 + 1);
 
-    random_seed(default_seed);
-
     WaveFormulaPtr formula = create_formula(expression);
     if (!formula) {
         std::cerr << "Invalid expression\n";
@@ -193,6 +191,7 @@ int main(int argc, char *argv[])
     }
     formula->set_size(wt.frames);
     formula->set_normalized(true);
+    formula->set_seed(default_seed);
 
     //
     const float* wave = formula->get_wave();

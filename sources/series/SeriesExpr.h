@@ -3,9 +3,16 @@
 #include <array>
 #include <memory>
 #include <iosfwd>
+class RandomGenerator;
 
 class Expr;
 typedef std::shared_ptr<Expr> ExprPtr;
+
+///
+struct ExprContext {
+    RandomGenerator* prng = nullptr;
+    float x = 0;
+};
 
 ///
 class Expr : public std::enable_shared_from_this<Expr> {
@@ -37,7 +44,7 @@ public:
     virtual ~Expr() {}
     virtual void repr(std::ostream &out) const = 0;
     static std::array<ExprPtr, 2> parse(const char *text);
-    virtual float evalInterpreted(float x) const = 0;
+    virtual float evalInterpreted(ExprContext& ctx) const = 0;
     Type type;
 };
 
@@ -46,7 +53,7 @@ class VarX : public Expr {
 public:
     VarX() : Expr(Type::VarX) {}
     void repr(std::ostream &out) const override;
-    float evalInterpreted(float x) const override;
+    float evalInterpreted(ExprContext& ctx) const override;
 };
 
 ///
@@ -54,7 +61,7 @@ class Random : public Expr {
 public:
     Random() : Expr(Type::Random) {}
     void repr(std::ostream &out) const override;
-    float evalInterpreted(float x) const override;
+    float evalInterpreted(ExprContext& ctx) const override;
 };
 
 ///
@@ -62,7 +69,7 @@ class Number : public Expr {
 public:
     explicit Number(double n) : Expr(Type::Number), number(n) {}
     void repr(std::ostream &out) const override;
-    float evalInterpreted(float x) const override;
+    float evalInterpreted(ExprContext& ctx) const override;
     double number;
 };
 
@@ -90,7 +97,7 @@ public:
     public:                                                                    \
         using BinopT::BinopT;                                                  \
         void repr(std::ostream &out) const override { genericRepr(out, sym); } \
-        float evalInterpreted(float x) const override;                         \
+        float evalInterpreted(ExprContext& ctx) const override;                \
     }
 
 DefBinop(Add, "+");

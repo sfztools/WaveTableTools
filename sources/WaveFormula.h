@@ -18,6 +18,8 @@ public:
     void set_size(unsigned size);
     bool get_normalized() const { return normalized_; }
     void set_normalized(bool normalized);
+    long get_seed() const { return seed_; }
+    void set_seed(long seed);
     float* get_wave() const;
 
 protected:
@@ -30,6 +32,7 @@ private:
 private:
     unsigned size_ = 2048;
     bool normalized_ = false;
+    long seed_ = 0;
     mutable std::unique_ptr<float[]> wave_;
 };
 

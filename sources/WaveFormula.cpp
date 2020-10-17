@@ -1,4 +1,5 @@
 #include "WaveFormula.h"
+#include "Random.h"
 #include "utility/Locale.h"
 #include <kiss_fftr.h>
 #include <algorithm>
@@ -22,6 +23,14 @@ void WaveFormula::set_normalized(bool normalized)
     if (normalized_ == normalized)
         return;
     normalized_ = normalized;
+    invalidate();
+}
+
+void WaveFormula::set_seed(long seed)
+{
+    if (seed_ == seed)
+        return;
+    seed_ = seed;
     invalidate();
 }
 
@@ -113,12 +122,25 @@ void SeriesFormula::compute_spectrum(std::complex<float>* spec) const
         return;
     }
 
+    RandomGenerator mag_prng;
+    RandomGenerator phase_prng;
+    mag_prng.seed(get_seed());
+    phase_prng.seed(get_seed());
+
     spec[0] = 0.0f;
     for (unsigned i = 1; i < size / 2 + 1; ++i) {
-        float mod = mag_expr->evalInterpreted(i);
+        ExprContext ctx;
+        ctx.x = static_cast<float>(i);
+
+        ctx.prng = &mag_prng;
+        float mod = mag_expr->evalInterpreted(ctx);
+
         float arg = 0.0;
-        if (phase_expr)
-            arg = phase_expr->evalInterpreted(i) * float(M_PI * 2);
+        if (phase_expr) {
+            ctx.prng = &phase_prng;
+            arg = phase_expr->evalInterpreted(ctx) * float(M_PI * 2);
+        }
+
         spec[i] = std::polar(0.5f * mod, float(-M_PI / 2) + arg);
     }
 }

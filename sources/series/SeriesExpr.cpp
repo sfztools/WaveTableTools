@@ -5,6 +5,7 @@
 #include "SeriesExprGrammarExtra.h"
 #include <iostream>
 #include <cmath>
+#include <cassert>
 
 ///
 std::array<ExprPtr, 2> Expr::parse(const char *text)
@@ -49,89 +50,90 @@ end1:
 }
 
 ///
-float VarX::evalInterpreted(float x) const
+float VarX::evalInterpreted(ExprContext& ctx) const
 {
-    return x;
+    return ctx.x;
 }
 
-float Random::evalInterpreted(float x) const
+float Random::evalInterpreted(ExprContext& ctx) const
 {
-    return random_next_float();
+    assert(ctx.prng);
+    return ctx.prng->next_float();
 }
 
-float Number::evalInterpreted(float x) const
+float Number::evalInterpreted(ExprContext& ctx) const
 {
     return number;
 }
 
-float Add::evalInterpreted(float x) const
+float Add::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) + rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) + rhs->evalInterpreted(ctx);
 }
 
-float Sub::evalInterpreted(float x) const
+float Sub::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) - rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) - rhs->evalInterpreted(ctx);
 }
 
-float Mul::evalInterpreted(float x) const
+float Mul::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) * rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) * rhs->evalInterpreted(ctx);
 }
 
-float Div::evalInterpreted(float x) const
+float Div::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) / rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) / rhs->evalInterpreted(ctx);
 }
 
-float Mod::evalInterpreted(float x) const
+float Mod::evalInterpreted(ExprContext& ctx) const
 {
-    return std::fmod(lhs->evalInterpreted(x), rhs->evalInterpreted(x));
+    return std::fmod(lhs->evalInterpreted(ctx), rhs->evalInterpreted(ctx));
 }
 
-float Pow::evalInterpreted(float x) const
+float Pow::evalInterpreted(ExprContext& ctx) const
 {
-    return std::pow(lhs->evalInterpreted(x), rhs->evalInterpreted(x));
+    return std::pow(lhs->evalInterpreted(ctx), rhs->evalInterpreted(ctx));
 }
 
-float Eq::evalInterpreted(float x) const
+float Eq::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) == rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) == rhs->evalInterpreted(ctx);
 }
 
-float Neq::evalInterpreted(float x) const
+float Neq::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) != rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) != rhs->evalInterpreted(ctx);
 }
 
-float Lt::evalInterpreted(float x) const
+float Lt::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) < rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) < rhs->evalInterpreted(ctx);
 }
 
-float Gt::evalInterpreted(float x) const
+float Gt::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) > rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) > rhs->evalInterpreted(ctx);
 }
 
-float Le::evalInterpreted(float x) const
+float Le::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) <= rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) <= rhs->evalInterpreted(ctx);
 }
 
-float Ge::evalInterpreted(float x) const
+float Ge::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) >= rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) >= rhs->evalInterpreted(ctx);
 }
 
-float And::evalInterpreted(float x) const
+float And::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) && rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) && rhs->evalInterpreted(ctx);
 }
 
-float Or::evalInterpreted(float x) const
+float Or::evalInterpreted(ExprContext& ctx) const
 {
-    return lhs->evalInterpreted(x) || rhs->evalInterpreted(x);
+    return lhs->evalInterpreted(ctx) || rhs->evalInterpreted(ctx);
 }
 
 ///

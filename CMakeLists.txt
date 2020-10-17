@@ -19,7 +19,6 @@ include(GNUInstallDirs)
 add_executable(WCreate
   "sources/WCreate.cpp"
   "sources/Random.h"
-  "sources/Random.cpp"
   "sources/Wavetable.h"
   "sources/Wavetable.cpp"
   "sources/WaveFormula.h"
