@@ -12,12 +12,19 @@ protected:
     WaveFormula() = default;
 
 public:
+    enum class AmplitudeType {
+        raw,
+        normalized,
+        saturated,
+    };
+
+public:
     virtual ~WaveFormula() {}
     virtual bool is_valid() const = 0;
     unsigned get_size() const { return size_; }
     void set_size(unsigned size);
-    bool get_normalized() const { return normalized_; }
-    void set_normalized(bool normalized);
+    AmplitudeType get_amplitude_type() const { return amptype_; }
+    void set_amplitude_type(AmplitudeType amptype);
     long get_seed() const { return seed_; }
     void set_seed(long seed);
     float* get_wave() const;
@@ -28,10 +35,11 @@ protected:
 
 private:
     static void normalize_wave(float* wave, unsigned size);
+    static void saturate_wave(float* wave, unsigned size);
 
 private:
     unsigned size_ = 2048;
-    bool normalized_ = false;
+    AmplitudeType amptype_ = AmplitudeType::raw;
     long seed_ = 0;
     mutable std::unique_ptr<float[]> wave_;
 };

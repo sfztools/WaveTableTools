@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
         return 1;
     }
     formula->set_size(wt.frames);
-    formula->set_normalized(true);
+    formula->set_amplitude_type(WaveFormula::AmplitudeType::normalized);
     formula->set_seed(default_seed);
 
     //

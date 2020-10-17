@@ -9,6 +9,7 @@
 #include <cmath>
 #include <clocale>
 #include <cerrno>
+#include <cassert>
 
 void WaveFormula::set_size(unsigned size)
 {
@@ -18,11 +19,11 @@ void WaveFormula::set_size(unsigned size)
     invalidate();
 }
 
-void WaveFormula::set_normalized(bool normalized)
+void WaveFormula::set_amplitude_type(AmplitudeType amptype)
 {
-    if (normalized_ == normalized)
+    if (amptype_ == amptype)
         return;
-    normalized_ = normalized;
+    amptype_ = amptype;
     invalidate();
 }
 
@@ -42,8 +43,19 @@ float* WaveFormula::get_wave() const
         wave = new float[size];
         wave_.reset(wave);
         compute_wave(wave);
-        if (normalized_)
+        switch (amptype_) {
+        default:
+            assert(false);
+            break;
+        case AmplitudeType::raw:
+            break;
+        case AmplitudeType::normalized:
             normalize_wave(wave, size);
+            break;
+        case AmplitudeType::saturated:
+            saturate_wave(wave, size);
+            break;
+        }
     }
     return wave;
 }
@@ -62,6 +74,12 @@ void WaveFormula::normalize_wave(float* wave, unsigned size)
         for (unsigned i = 0; i < size; ++i)
             wave[i] = std::max(-1.0f, std::min(1.0f, wave[i] / max_amplitude));
     }
+}
+
+void WaveFormula::saturate_wave(float* wave, unsigned size)
+{
+    for (unsigned i = 0; i < size; ++i)
+        wave[i] = std::max(-1.0f, std::min(1.0f, wave[i]));
 }
 
 //------------------------------------------------------------------------------
