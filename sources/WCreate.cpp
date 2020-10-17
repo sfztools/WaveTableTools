@@ -2,18 +2,9 @@
 #include "Random.h"
 #include "Wavetable.h"
 #include "WaveFormula.h"
-#include <kiss_fftr.h>
 #include <iostream>
-#include <vector>
-#include <complex>
 #include <cstdlib>
 #include <cstring>
-typedef std::complex<float> cfloat;
-
-template <class T> T clamp(T v, T lo, T hi)
-{
-    return std::max(std::min(v, hi), lo);
-}
 
 namespace {
     int table_size = 0;
@@ -151,7 +142,7 @@ static void display_wave(const float* data, unsigned size, int rows, int cols)
     fputs(text.get(), stdout);
 }
 
-WaveFormulaPtr create_formula(const char* expr)
+static WaveFormulaPtr create_formula(const char* expr)
 {
     WaveFormulaPtr formula;
 
@@ -182,8 +173,6 @@ int main(int argc, char *argv[])
     wt.data.reset(new float[wt.frames]);
 
     //
-    std::vector<kiss_fft_cpx> spectrum(wt.frames / 2 + 1);
-
     WaveFormulaPtr formula = create_formula(expression);
     if (!formula) {
         std::cerr << "Invalid expression\n";
