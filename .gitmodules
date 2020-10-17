@@ -1,0 +1,12 @@
+[submodule "thirdparty/imgui"]
+	path = thirdparty/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "thirdparty/implot"]
+	path = thirdparty/implot
+	url = https://github.com/epezent/implot.git
+[submodule "thirdparty/osdialog"]
+	path = thirdparty/osdialog
+	url = https://github.com/AndrewBelt/osdialog.git
+[submodule "thirdparty/span-lite"]
+	path = thirdparty/span-lite
+	url = https://github.com/martinmoene/span-lite.git

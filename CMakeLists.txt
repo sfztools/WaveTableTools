@@ -2,11 +2,14 @@ cmake_minimum_required(VERSION "3.7")
 
 project(WaveTableTools)
 
+option(WAVE_TABLE_TOOLS_ENABLE_UI "Enable UI" ON)
+
 if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   string(APPEND CMAKE_CXX_FLAGS " -Wall")
 endif()
 
 add_subdirectory("thirdparty/kiss_fft" EXCLUDE_FROM_ALL)
+add_subdirectory("thirdparty/span-lite" EXCLUDE_FROM_ALL)
 
 #
 find_package(PkgConfig REQUIRED)
@@ -65,4 +68,72 @@ if(FLEX_PROGRAM AND BISON_PROGRAM)
 endif()
 
 #
+if(WAVE_TABLE_TOOLS_ENABLE_UI)
+  find_package(SDL2 REQUIRED)
+  set(OpenGL_GL_PREFERENCE "GLVND")
+  find_package(OpenGL REQUIRED)
+  if(WIN32)
+  elseif(APPLE)
+    find_library(APPKIT_FRAMEWORK "AppKit")
+  else()
+    pkg_check_modules(Gtk3 "gtk+-3.0" REQUIRED IMPORTED_TARGET)
+  endif()
+
+  #
+  add_library(imgui STATIC
+    "thirdparty/imgui/imgui.cpp"
+    "thirdparty/imgui/imgui_draw.cpp"
+    "thirdparty/imgui/imgui_widgets.cpp")
+  target_include_directories(imgui PUBLIC "thirdparty/imgui")
+
+  #
+  add_library(implot STATIC
+    "thirdparty/implot/implot.cpp"
+    "thirdparty/implot/implot_items.cpp")
+  target_include_directories(implot PUBLIC "thirdparty/implot")
+  target_link_libraries(implot PUBLIC imgui)
+
+  #
+  add_library(imgui-backend STATIC
+    "thirdparty/imgui/backends/imgui_impl_sdl.cpp"
+    "thirdparty/imgui/backends/imgui_impl_opengl2.cpp")
+  target_include_directories(imgui-backend PUBLIC
+    "thirdparty/imgui"
+    "thirdparty/imgui/backends")
+  if(TARGET SDL2::SDL2)
+    target_link_libraries(imgui-backend PUBLIC SDL2::SDL2 OpenGL::OpenGL)
+  else()
+    target_include_directories(imgui-backend PUBLIC ${SDL2_INCLUDE_DIRS})
+    target_link_libraries(imgui-backend PUBLIC ${SDL2_LIBRARIES})
+  endif()
+
+  #
+  add_library(osdialog STATIC "thirdparty/osdialog/osdialog.c")
+  target_include_directories(osdialog PUBLIC "thirdparty/osdialog")
+  if(WIN32)
+    target_sources(osdialog PRIVATE "thirdparty/osdialog/osdialog_win.c")
+    target_link_libraries(osdialog PRIVATE "comdlg32")
+  elseif(APPLE)
+    target_sources(osdialog PRIVATE "thirdparty/osdialog/osdialog_mac.m")
+    target_link_libraries(osdialog PRIVATE "${APPKIT_FRAMEWORK}")
+  else()
+    target_sources(osdialog PRIVATE "thirdparty/osdialog/osdialog_gtk3.c")
+    target_link_libraries(osdialog PRIVATE PkgConfig::Gtk3)
+  endif()
+
+  #
+  add_executable(WCreateInteractive
+    "sources/interactive/WCreate.cpp"
+    "sources/interactive/dsp/Wavetables.cpp"
+    "sources/interactive/dsp/Wavetables.h")
+  target_link_libraries(WCreateInteractive PRIVATE WLib implot imgui imgui-backend osdialog sfizz-kissfft nonstd::span-lite)
+  if(NOT (WIN32 OR APPLE))
+    target_link_libraries(WCreateInteractive PRIVATE PkgConfig::Gtk3)
+  endif()
+endif()
+
+#
 install(TARGETS WCreate WMorph RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+if(WAVE_TABLE_TOOLS_ENABLE_UI)
+  install(TARGETS WCreateInteractive RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+endif()
