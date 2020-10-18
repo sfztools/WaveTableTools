@@ -404,6 +404,8 @@ static void SDLCALL generate_audio(void *userdata, uint8_t *stream, int bytes)
     default:
         assert(false);
         break;
+    case AudioRequest::none:
+        break;
     case AudioRequest::key:
         actx->key_on = true;
         actx->eg_time = 0;
