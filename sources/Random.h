@@ -3,7 +3,7 @@
 
 class RandomGenerator {
 public:
-    typedef std::minstd_rand0 prng_type;
+    typedef std::mt19937_64 prng_type;
     typedef typename prng_type::result_type result_type;
 
 public:
@@ -23,11 +23,12 @@ inline void RandomGenerator::seed(long seed)
 
 inline double RandomGenerator::next_double()
 {
-    double d = static_cast<double>(source_());
-    return (d - source_.min()) / (source_.max() - source_.min());
+    std::uniform_real_distribution<double> dist(0, 1);
+    return dist(source_);
 }
 
 inline float RandomGenerator::next_float()
 {
-    return static_cast<float>(next_double());
+    std::uniform_real_distribution<float> dist(0, 1);
+    return dist(source_);
 }
