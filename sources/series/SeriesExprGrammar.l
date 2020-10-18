@@ -24,15 +24,20 @@
   }
 %}
 
+DECIMAL [0-9]+
+REAL ([0-9]+)?\.[0-9]*
+EXPONENT [eE][-\+]?[0-9]+
+NUMBER ({DECIMAL}{EXPONENT}?)|({REAL}{EXPONENT}?)
+
 %%
 
-[ \t]+                ;
+[ \t\r\n]+            ;
 ";"                   return SEMICOLON;
 "#"                   return SHARP;
 "("                   return OPEN;
 ")"                   return CLOSE;
 "x"                   return VARX;
-[0-9]+(\.[0-9]*)?     yylval->n = to_number(yytext, yyextra->c_locale); return NUMBER;
+{NUMBER}              yylval->n = to_number(yytext, yyextra->c_locale); return NUMBER;
 "+"                   return PLUS;
 "-"                   return MINUS;
 "*"                   return TIMES;
