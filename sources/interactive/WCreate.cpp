@@ -269,6 +269,8 @@ int main(int argc, char **argv)
                 while (actx.request.load() != AudioRequest::none)
                     std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
+
+            ImGui::End();
         }
 
         if (param.need_update) {
