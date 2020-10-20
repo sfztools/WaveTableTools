@@ -12,10 +12,12 @@ namespace ms_stl {
 
 using namespace std;
 
-#if __has_cpp_attribute(nodiscard)
-#   define NODISCARD_ [[nodiscard]]
-#else
-#   define NODISCARD_
+#if !defined(NODISCARD_)
+#   if __has_cpp_attribute(nodiscard)
+#       define NODISCARD_ [[nodiscard]]
+#   else
+#       define NODISCARD_
+#   endif
 #endif
 
 // FUNCTION TEMPLATE generate_canonical
