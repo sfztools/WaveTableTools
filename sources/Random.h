@@ -1,9 +1,9 @@
 #pragma once
-#include <random>
+#include "random/ms_stl_random.h"
 
 class RandomGenerator {
 public:
-    typedef std::mt19937_64 prng_type;
+    typedef ms_stl::mt19937 prng_type;
     typedef typename prng_type::result_type result_type;
 
 public:
@@ -23,12 +23,12 @@ inline void RandomGenerator::seed(long seed)
 
 inline double RandomGenerator::next_double()
 {
-    std::uniform_real_distribution<double> dist(0, 1);
+    ms_stl::uniform_real_distribution<double> dist(0, 1);
     return dist(source_);
 }
 
 inline float RandomGenerator::next_float()
 {
-    std::uniform_real_distribution<float> dist(0, 1);
+    ms_stl::uniform_real_distribution<float> dist(0, 1);
     return dist(source_);
 }
