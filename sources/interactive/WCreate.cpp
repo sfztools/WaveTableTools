@@ -249,7 +249,7 @@ int main(int argc, char **argv)
             for (unsigned i = 0, n = IM_ARRAYSIZE(key_names); i < n; ++i) {
                 if (i > 0)
                     ImGui::SameLine();
-                if (ImGui::Button(key_names[i])) {
+                if (ImGui::ButtonEx(key_names[i], ImVec2(0, 0), ImGuiButtonFlags_PressedOnClick)) {
                     play_key = i;
                     key_played = true;
                 }
