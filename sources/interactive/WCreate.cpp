@@ -247,9 +247,10 @@ int main(int argc, char **argv)
             bool key_played = false;
 
             for (unsigned i = 0, n = IM_ARRAYSIZE(key_names); i < n; ++i) {
+                int button_width = 25;
                 if (i > 0)
-                    ImGui::SameLine();
-                if (ImGui::ButtonEx(key_names[i], ImVec2(0, 0), ImGuiButtonFlags_PressedOnClick)) {
+                    ImGui::SameLine(ImGui::GetWindowContentRegionMin().x + i * button_width);
+                if (ImGui::ButtonEx(key_names[i], ImVec2(button_width, 0), ImGuiButtonFlags_PressedOnClick)) {
                     play_key = i;
                     key_played = true;
                 }
@@ -258,7 +259,7 @@ int main(int argc, char **argv)
             ImGui::SameLine();
             ImGui::Spacing();
             ImGui::SameLine();
-            ImGui::SetNextItemWidth(200);
+            ImGui::SetNextItemWidth(240);
             ImGui::SliderInt("Octave", &play_octave, -1, 10, "%d");
 
             if (key_played) {
