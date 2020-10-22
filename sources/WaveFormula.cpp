@@ -45,8 +45,6 @@ float* WaveFormula::get_wave() const
         compute_wave(wave);
         switch (amptype_) {
         default:
-            assert(false);
-            break;
         case AmplitudeType::raw:
             break;
         case AmplitudeType::normalized:

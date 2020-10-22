@@ -1,4 +1,5 @@
 #include "Wavetable.h"
+#include "utility/unicodefile.h"
 #include <sndfile.hh>
 #include <iostream>
 #include <memory>
@@ -127,7 +128,7 @@ int main(int argc, char *argv[])
             table[i] = (1 - ratio) * wave1[i] + ratio * wave2[i];
     }
 
-    FILE *stream = fopen(output_filename, "wb");
+    FILE *stream = fopen_utf8(output_filename, "wb");
     if (!stream) {
         std::cerr << "Cannot open file for writing.\n";
         return 1;

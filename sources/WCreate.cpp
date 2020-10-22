@@ -2,6 +2,7 @@
 #include "Random.h"
 #include "Wavetable.h"
 #include "WaveFormula.h"
+#include "utility/unicodefile.h"
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
@@ -191,7 +192,7 @@ int main(int argc, char *argv[])
         display_wave(wt.data.get(), wt.frames, 20, 80);
 
     //
-    FILE *stream = fopen(output_filename, "wb");
+    FILE *stream = fopen_utf8(output_filename, "wb");
     if (!stream) {
         std::cerr << "Cannot open file for writing.\n";
         return 1;

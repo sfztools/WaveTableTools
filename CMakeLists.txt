@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION "3.7")
 
 project(WaveTableTools)
 
+set(CMAKE_CXX_STANDARD 11)
+
 option(WAVE_TABLE_TOOLS_ENABLE_UI "Enable UI" ON)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
@@ -42,11 +44,17 @@ target_link_libraries(WLib PRIVATE
   sfizz-kissfft)
 
 #
-add_executable(WCreate "sources/WCreate.cpp")
+add_executable(WCreate
+  "sources/WCreate.cpp"
+  "sources/utility/unicodefile.h"
+  "sources/utility/unicodefile.c")
 target_link_libraries(WCreate PRIVATE WLib)
 
 #
-add_executable(WMorph "sources/WMorph.cpp")
+add_executable(WMorph
+  "sources/WMorph.cpp"
+  "sources/utility/unicodefile.h"
+  "sources/utility/unicodefile.c")
 target_link_libraries(WMorph PRIVATE WLib PkgConfig::sndfile)
 
 #
@@ -83,8 +91,11 @@ if(WAVE_TABLE_TOOLS_ENABLE_UI)
   add_library(imgui STATIC
     "thirdparty/imgui/imgui.cpp"
     "thirdparty/imgui/imgui_draw.cpp"
-    "thirdparty/imgui/imgui_widgets.cpp")
-  target_include_directories(imgui PUBLIC "thirdparty/imgui")
+    "thirdparty/imgui/imgui_widgets.cpp"
+    "thirdparty/imgui/misc/cpp/imgui_stdlib.cpp")
+  target_include_directories(imgui PUBLIC
+    "thirdparty/imgui"
+    "thirdparty/imgui/misc/cpp")
 
   #
   add_library(implot STATIC
@@ -122,18 +133,20 @@ if(WAVE_TABLE_TOOLS_ENABLE_UI)
   endif()
 
   #
-  add_executable(WCreateInteractive
-    "sources/interactive/WCreate.cpp"
+  add_executable(WEdit
+    "sources/interactive/WEdit.cpp"
     "sources/interactive/dsp/Wavetables.cpp"
-    "sources/interactive/dsp/Wavetables.h")
-  target_link_libraries(WCreateInteractive PRIVATE WLib implot imgui imgui-backend osdialog sfizz-kissfft nonstd::span-lite)
+    "sources/interactive/dsp/Wavetables.h"
+    "sources/utility/unicodefile.h"
+    "sources/utility/unicodefile.c")
+  target_link_libraries(WEdit PRIVATE WLib implot imgui imgui-backend osdialog sfizz-kissfft nonstd::span-lite)
   if(NOT (WIN32 OR APPLE))
-    target_link_libraries(WCreateInteractive PRIVATE PkgConfig::Gtk3)
+    target_link_libraries(WEdit PRIVATE PkgConfig::Gtk3)
   endif()
 endif()
 
 #
 install(TARGETS WCreate WMorph RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 if(WAVE_TABLE_TOOLS_ENABLE_UI)
-  install(TARGETS WCreateInteractive RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+  install(TARGETS WEdit RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 endif()

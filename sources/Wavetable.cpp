@@ -33,7 +33,9 @@ static size_t writeF32(FILE *stream, float x)
     return writeLE32(stream, u.i);
 }
 
-void Wavetables::saveToWAVFile(FILE *stream, const Wavetable &wt)
+void Wavetables::saveToWAVFile(
+    FILE *stream, const Wavetable &wt,
+    const char *chunkId, const void *chunkData, uint32_t chunkSize)
 {
     const unsigned sampleRate = 44100;
     const unsigned channels = 1;
@@ -87,6 +89,13 @@ void Wavetables::saveToWAVFile(FILE *stream, const Wavetable &wt)
         //
         writeLE32(stream, data.size());
         fwrite(data.data(), 1, data.size(), stream);
+    }
+
+    // extra chunk
+    if (chunkId) {
+        fwrite(chunkId, 1, 4, stream);
+        writeLE32(stream, chunkSize);
+        fwrite(chunkData, 1, chunkSize, stream);
     }
 
     off_t riffEnd = ftell(stream);
