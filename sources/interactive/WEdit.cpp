@@ -132,7 +132,7 @@ static bool load_chunk(const char *filename, SaveFileBufferedData &file_data);
 static bool load_chunk(FILE *fh, SaveFileBufferedData &file_data);
 static void SDLCALL generate_audio(void *userdata, uint8_t *stream, int bytes);
 
-int main(int argc, char **argv)
+extern "C" int utf8main(int argc, char **argv)
 {
     (void)argc;
     (void)argv;

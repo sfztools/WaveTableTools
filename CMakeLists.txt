@@ -10,6 +10,11 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   string(APPEND CMAKE_CXX_FLAGS " -Wall")
 endif()
 
+if(MINGW)
+  string(APPEND CMAKE_C_FLAGS " -municode")
+  string(APPEND CMAKE_CXX_FLAGS " -municode")
+endif()
+
 add_subdirectory("thirdparty/kiss_fft" EXCLUDE_FROM_ALL)
 add_subdirectory("thirdparty/span-lite" EXCLUDE_FROM_ALL)
 
@@ -150,7 +155,8 @@ if(WAVE_TABLE_TOOLS_ENABLE_UI)
     "sources/interactive/dsp/Wavetables.cpp"
     "sources/interactive/dsp/Wavetables.h"
     "sources/utility/unicodefile.h"
-    "sources/utility/unicodefile.c")
+    "sources/utility/unicodefile.c"
+    "sources/utility/utf8main.c")
   target_link_libraries(WEdit PRIVATE WLib implot imgui imgui-backend osdialog sfizz-kissfft nonstd::span-lite)
   if(NOT (WIN32 OR APPLE))
     target_link_libraries(WEdit PRIVATE PkgConfig::Gtk3)
