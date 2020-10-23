@@ -11,6 +11,10 @@
 #include <stdexcept>
 #include <cassert>
 
+#if !defined(M_PI)
+#   define M_PI 3.14159265358979323846
+#endif
+
 namespace sfz {
 
 void WavetableOscillator::init(double sampleRate)

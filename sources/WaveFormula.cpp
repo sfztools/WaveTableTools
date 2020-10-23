@@ -11,6 +11,10 @@
 #include <cerrno>
 #include <cassert>
 
+#if !defined(M_PI)
+#   define M_PI 3.14159265358979323846
+#endif
+
 void WaveFormula::set_size(unsigned size)
 {
     if (size_ == size)
