@@ -10,6 +10,11 @@
   #include "SeriesExprGrammar.tab.h"
   #include "SeriesExprGrammarExtra.h"
 
+  #if defined(_WIN32)
+     #define YY_NO_UNISTD_H 1
+     #include <io.h>
+  #endif
+
   static double to_number(const char *text, Locale::handle_type loc)
   {
     double number;
