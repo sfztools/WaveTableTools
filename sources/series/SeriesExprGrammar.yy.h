@@ -3,8 +3,12 @@
 #define yyIN_HEADER 1
 
 #line 5 "SeriesExprGrammar.yy.h"
+  #if defined(_WIN32)
+     #define YY_NO_UNISTD_H 1
+     #include <io.h>
+  #endif
 
-#line 7 "SeriesExprGrammar.yy.h"
+#line 11 "SeriesExprGrammar.yy.h"
 
 #define  YY_INT_ALIGNED short int
 
@@ -514,8 +518,8 @@ extern int yylex \
 #undef yyTABLES_NAME
 #endif
 
-#line 62 "SeriesExprGrammar.l"
+#line 64 "SeriesExprGrammar.l"
 
-#line 519 "SeriesExprGrammar.yy.h"
+#line 523 "SeriesExprGrammar.yy.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */
