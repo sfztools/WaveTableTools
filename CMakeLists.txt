@@ -133,7 +133,7 @@ if(WAVE_TABLE_TOOLS_ENABLE_UI)
   endif()
 
   #
-  add_executable(WEdit
+  add_executable(WEdit WIN32
     "sources/interactive/WEdit.cpp"
     "sources/interactive/dsp/Wavetables.cpp"
     "sources/interactive/dsp/Wavetables.h"
