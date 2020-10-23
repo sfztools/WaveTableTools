@@ -14,8 +14,12 @@ add_subdirectory("thirdparty/kiss_fft" EXCLUDE_FROM_ALL)
 add_subdirectory("thirdparty/span-lite" EXCLUDE_FROM_ALL)
 
 #
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(sndfile "sndfile" REQUIRED IMPORTED_TARGET)
+find_package(PkgConfig)
+if(MSVC)
+  find_package(SndFile REQUIRED)
+else()
+  pkg_check_modules(sndfile "sndfile" REQUIRED IMPORTED_TARGET)
+endif()
 
 #
 include(GNUInstallDirs)
@@ -55,7 +59,12 @@ add_executable(WMorph
   "sources/WMorph.cpp"
   "sources/utility/unicodefile.h"
   "sources/utility/unicodefile.c")
-target_link_libraries(WMorph PRIVATE WLib PkgConfig::sndfile)
+target_link_libraries(WMorph PRIVATE WLib)
+if(MSVC)
+  target_link_libraries(WMorph PRIVATE SndFile::sndfile)
+else()
+  target_link_libraries(WMorph PRIVATE PkgConfig::sndfile)
+endif()
 
 #
 find_program(FLEX_PROGRAM "flex")
@@ -111,12 +120,15 @@ if(WAVE_TABLE_TOOLS_ENABLE_UI)
   target_include_directories(imgui-backend PUBLIC
     "thirdparty/imgui"
     "thirdparty/imgui/backends")
-  if(TARGET SDL2::SDL2)
-    target_link_libraries(imgui-backend PUBLIC SDL2::SDL2 OpenGL::OpenGL)
+  if(MSVC AND TARGET SDL2::SDL2-static)
+    target_link_libraries(imgui-backend PUBLIC SDL2::SDL2-static)
+  elseif(TARGET SDL2::SDL2)
+    target_link_libraries(imgui-backend PUBLIC SDL2::SDL2)
   else()
     target_include_directories(imgui-backend PUBLIC ${SDL2_INCLUDE_DIRS})
     target_link_libraries(imgui-backend PUBLIC ${SDL2_LIBRARIES})
   endif()
+  target_link_libraries(imgui-backend PUBLIC OpenGL::GL)
 
   #
   add_library(osdialog STATIC "thirdparty/osdialog/osdialog.c")
