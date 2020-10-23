@@ -10,6 +10,10 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   string(APPEND CMAKE_CXX_FLAGS " -Wall")
 endif()
 
+if(WIN32)
+  add_compile_definitions("-D_USE_MATH_DEFINES=1")
+endif()
+
 add_subdirectory("thirdparty/kiss_fft" EXCLUDE_FROM_ALL)
 add_subdirectory("thirdparty/span-lite" EXCLUDE_FROM_ALL)
 
