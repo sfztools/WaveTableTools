@@ -6,7 +6,7 @@
 	url = https://github.com/epezent/implot.git
 [submodule "thirdparty/osdialog"]
 	path = thirdparty/osdialog
-	url = https://github.com/AndrewBelt/osdialog.git
+	url = https://github.com/sfztools/osdialog.git
 [submodule "thirdparty/span-lite"]
 	path = thirdparty/span-lite
 	url = https://github.com/martinmoene/span-lite.git
