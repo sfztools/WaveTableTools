@@ -5,9 +5,6 @@
 #line 5 "SeriesExprGrammar.yy.h"
   #if defined(_WIN32)
      #define YY_NO_UNISTD_H 1
-     #include <io.h>
-     #define fileno _fileno
-     #define isatty _isatty
   #endif
 
   #if !defined(FLEXINT_H)
@@ -21,7 +18,7 @@
   typedef uint32_t flex_uint32_t;
   #endif
 
-#line 24 "SeriesExprGrammar.yy.h"
+#line 21 "SeriesExprGrammar.yy.h"
 
 #define  YY_INT_ALIGNED short int
 
@@ -531,8 +528,8 @@ extern int yylex \
 #undef yyTABLES_NAME
 #endif
 
-#line 77 "SeriesExprGrammar.l"
+#line 80 "SeriesExprGrammar.l"
 
-#line 536 "SeriesExprGrammar.yy.h"
+#line 533 "SeriesExprGrammar.yy.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */

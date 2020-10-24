@@ -1,9 +1,6 @@
 %top{
   #if defined(_WIN32)
      #define YY_NO_UNISTD_H 1
-     #include <io.h>
-     #define fileno _fileno
-     #define isatty _isatty
   #endif
 
   #if !defined(FLEXINT_H)
@@ -29,6 +26,12 @@
   #include <string.h>
   #include "SeriesExprGrammar.tab.h"
   #include "SeriesExprGrammarExtra.h"
+
+  #if defined(_WIN32)
+     #include <io.h>
+     #define fileno _fileno
+     #define isatty _isatty
+  #endif
 
   static double to_number(const char *text, Locale::handle_type loc)
   {
