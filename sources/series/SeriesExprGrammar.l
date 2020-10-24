@@ -2,16 +2,20 @@
   #if defined(_WIN32)
      #define YY_NO_UNISTD_H 1
      #include <io.h>
+     #define fileno _fileno
+     #define isatty _isatty
   #endif
 
-  #define FLEXINT_H 1
-  #include <cstdint>
+  #if !defined(FLEXINT_H)
+  #   define FLEXINT_H
+  #   include <cstdint>
   typedef int8_t flex_int8_t;
   typedef uint8_t flex_uint8_t;
   typedef int16_t flex_int16_t;
   typedef uint16_t flex_uint16_t;
   typedef int32_t flex_int32_t;
   typedef uint32_t flex_uint32_t;
+  #endif
 }
 
 %option noinput nounput noyywrap 8bit nodefault
