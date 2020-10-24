@@ -1,11 +1,21 @@
 #include "Wavetable.h"
 #include "utility/unicodefile.h"
-#include <sndfile.hh>
 #include <iostream>
 #include <memory>
 #include <cstdlib>
 #include <cstring>
 
+///
+#define DR_WAV_IMPLEMENTATION
+#include <dr_wav.h>
+
+struct drwav_deleter {
+    void operator()(drwav *x) const noexcept { drwav_uninit(x); delete x; }
+};
+
+typedef std::unique_ptr<drwav, drwav_deleter> drwav_u;
+
+///
 namespace {
     int num_stages = 0;
     const char *input1_filename = nullptr;
@@ -66,32 +76,34 @@ int main(int argc, char *argv[])
     if (!parse_args(argc, argv))
         return 1;
 
-    SndfileHandle snd1(input1_filename);
-    if (snd1.error()) {
+    drwav_u snd1(new drwav);
+    if (!drwav_init_file(snd1.get(), input1_filename, nullptr)) {
+        delete snd1.release();
         std::cerr << "Cannot open sound file: " << input1_filename << '\n';
         return 1;
     }
-    SndfileHandle snd2(input2_filename);
-    if (snd2.error()) {
+    drwav_u snd2(new drwav);
+    if (!drwav_init_file(snd2.get(), input2_filename, nullptr)) {
+        delete snd2.release();
         std::cerr << "Cannot open sound file: " << input2_filename << '\n';
         return 1;
     }
 
     //
-    const sf_count_t frames = snd1.frames();
+    const uint64_t frames = snd1->totalPCMFrameCount;
     if (frames < 2 || frames > 8192) {
         std::cerr << "Invalid number of frames in input file 1.\n";
         return 1;
     }
-    if (frames != snd2.frames()) {
+    if (frames != snd2->totalPCMFrameCount) {
         std::cerr << "The number of frames does not match in the input files.\n";
         return 1;
     }
-    if (snd1.channels() != 1) {
+    if (snd1->channels != 1) {
         std::cerr << "The input file 1 does not contain exactly one audio channel.\n";
         return 1;
     }
-    if (snd2.channels() != 1) {
+    if (snd2->channels != 1) {
         std::cerr << "The input file 2 does not contain exactly one audio channel.\n";
         return 1;
     }
@@ -100,17 +112,17 @@ int main(int argc, char *argv[])
     std::unique_ptr<float[]> wave1(new float[frames]);
     std::unique_ptr<float[]> wave2(new float[frames]);
 
-    if (snd1.read(wave1.get(), frames) != frames) {
+    if (drwav_read_pcm_frames_f32(snd1.get(), frames, wave1.get()) != frames) {
         std::cerr << "Cannot read the input file 1.\n";
         return 1;
     }
-    if (snd2.read(wave2.get(), frames) != frames) {
+    if (drwav_read_pcm_frames_f32(snd2.get(), frames, wave2.get()) != frames) {
         std::cerr << "Cannot read the input file 2.\n";
         return 1;
     }
 
-    snd1 = SndfileHandle();
-    snd2 = SndfileHandle();
+    snd1.reset();
+    snd2.reset();
 
     //
     const unsigned num_stages = ::num_stages;

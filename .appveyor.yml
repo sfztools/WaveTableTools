@@ -18,7 +18,6 @@ for:
       CMAKE_GENERATOR_PLATFORM: Win32
     install:
       - cmd: vcpkg install sdl2:%VCPKG_TRIPLET%
-      - cmd: vcpkg install libsndfile:%VCPKG_TRIPLET%
     before_build:
       - cmd: git submodule update --init --recursive
     build_script:

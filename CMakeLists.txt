@@ -22,13 +22,11 @@ endif()
 add_subdirectory("thirdparty/kiss_fft" EXCLUDE_FROM_ALL)
 add_subdirectory("thirdparty/span-lite" EXCLUDE_FROM_ALL)
 
+add_library(dr_wav INTERFACE)
+target_include_directories(dr_wav INTERFACE "thirdparty/dr_libs")
+
 #
 find_package(PkgConfig)
-if(MSVC)
-  find_package(SndFile REQUIRED)
-else()
-  pkg_check_modules(sndfile "sndfile" REQUIRED IMPORTED_TARGET)
-endif()
 
 #
 include(GNUInstallDirs)
@@ -68,12 +66,7 @@ add_executable(WMorph
   "sources/WMorph.cpp"
   "sources/utility/unicodefile.h"
   "sources/utility/unicodefile.c")
-target_link_libraries(WMorph PRIVATE WLib)
-if(MSVC)
-  target_link_libraries(WMorph PRIVATE SndFile::sndfile)
-else()
-  target_link_libraries(WMorph PRIVATE PkgConfig::sndfile)
-endif()
+target_link_libraries(WMorph PRIVATE WLib dr_wav)
 
 #
 find_program(FLEX_PROGRAM "flex")
