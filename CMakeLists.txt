@@ -15,6 +15,10 @@ if(MINGW)
   string(APPEND CMAKE_CXX_FLAGS " -municode")
 endif()
 
+if(WIN32)
+  add_definitions("-D_CRT_SECURE_NO_WARNINGS=1")
+endif()
+
 add_subdirectory("thirdparty/kiss_fft" EXCLUDE_FROM_ALL)
 add_subdirectory("thirdparty/span-lite" EXCLUDE_FROM_ALL)
 

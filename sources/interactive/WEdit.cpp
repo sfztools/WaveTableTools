@@ -183,7 +183,7 @@ extern "C" int utf8main(int argc, char **argv)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE|SDL_WINDOW_ALLOW_HIGHDPI);
-    SDL_Window *window = SDL_CreateWindow(app_display_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_size.x, window_size.y, window_flags);
+    SDL_Window *window = SDL_CreateWindow(app_display_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, (int)window_size.x, (int)window_size.y, window_flags);
     SDL_GLContext gl_context = SDL_GL_CreateContext(window);
     SDL_GL_MakeCurrent(window, gl_context);
     SDL_GL_SetSwapInterval(1);
@@ -343,7 +343,7 @@ extern "C" int utf8main(int argc, char **argv)
                 int button_width = 25;
                 if (i > 0)
                     ImGui::SameLine(ImGui::GetWindowContentRegionMin().x + i * button_width);
-                if (ImGui::ButtonEx(key_names[i], ImVec2(button_width, 0), ImGuiButtonFlags_PressedOnClick)) {
+                if (ImGui::ButtonEx(key_names[i], ImVec2((float)button_width, 0), ImGuiButtonFlags_PressedOnClick)) {
                     play_key = i;
                     key_played = true;
                 }
@@ -856,7 +856,7 @@ static bool load_chunk(FILE *fh, SaveFileBufferedData &file_data)
 static void SDLCALL generate_audio(void *userdata, uint8_t *stream, int bytes)
 {
     AudioContext *actx = (AudioContext *)userdata;
-    const float srate = actx->spec.freq;
+    const float srate = (float)actx->spec.freq;
     const float speriod = 1.0f / srate;
     float *outputs = (float *)stream;
     const unsigned nframes = (unsigned)bytes / (2 * sizeof(float));
