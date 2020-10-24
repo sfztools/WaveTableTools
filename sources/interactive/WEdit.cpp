@@ -503,9 +503,9 @@ extern "C" int utf8main(int argc, char **argv)
             const WaveFormula &formula = current_wave_slot->formula();
             if (formula.is_valid())
                 wt = new sfz::WavetableMulti(sfz::Wavetables::createFromAudioData(formula.get_wave(), wave_size));
-            actx.wt.reset(wt);
 
             SDL_LockAudioDevice(actx.dev);
+            actx.wt.reset(wt);
             actx.osc.setWavetable(wt);
             SDL_UnlockAudioDevice(actx.dev);
 
