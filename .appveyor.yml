@@ -1,17 +1,16 @@
-image:
-  - Visual Studio 2019
-
-configuration: Release
+configuration:
+  - Release
 
 environment:
   matrix:
-    - build_type: Win32
+    - platform: Win32
+      image: Visual Studio 2019
 
 for:
   -
     matrix:
       only:
-        - build_type: Win32
+        - platform: Win32
         - image: Visual Studio 2019
     environment:
       VCPKG_TRIPLET: x86-windows-static
@@ -25,6 +24,12 @@ for:
     build_script:
       - cmd: mkdir CMakeBuild
       - cmd: cd CMakeBuild
-      - cmd: cmake -G"%CMAKE_GENERATOR%" -A"%CMAKE_GENERATOR_PLATFORM%" -DCMAKE_BUILD_TYPE=Release -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% -DCMAKE_TOOLCHAIN_FILE=C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake ..
+      - cmd: cmake -G"%CMAKE_GENERATOR%" -A"%CMAKE_GENERATOR_PLATFORM%" -DCMAKE_BUILD_TYPE=Release -DVCPKG_TARGET_TRIPLET="%VCPKG_TRIPLET%" -DCMAKE_TOOLCHAIN_FILE=C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake ..
       - cmd: cd ..
       - cmd: cmake --build CMakeBuild --config Release -j
+      - cmd: mkdir "%APPVEYOR_PROJECT_NAME%-%platform%"
+      - cmd: cp CMakeBuild/Release/*.exe "%APPVEYOR_PROJECT_NAME%-%platform%/"
+      - cmd: 7z a "%APPVEYOR_PROJECT_NAME%-%platform%.zip" "%APPVEYOR_PROJECT_NAME%-%platform%/"
+    artifacts:
+      - path: $(APPVEYOR_PROJECT_NAME)-$(platform).zip
+        name: 'Windows 32-bit'
