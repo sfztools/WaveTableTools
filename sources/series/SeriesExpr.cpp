@@ -63,7 +63,7 @@ float Random::evalInterpreted(ExprContext& ctx) const
 
 float Number::evalInterpreted(ExprContext& ctx) const
 {
-    return number;
+    return static_cast<float>(number);
 }
 
 float Add::evalInterpreted(ExprContext& ctx) const
