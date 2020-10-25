@@ -7,6 +7,21 @@
 #include <cmath>
 #include <cassert>
 
+bool ExprFunctionId::operator==(const ExprFunctionId &other) const
+{
+    return name == other.name && arity == other.arity;
+}
+
+bool ExprFunctionId::operator!=(const ExprFunctionId &other) const
+{
+    return !operator==(other);
+}
+
+size_t std::hash<ExprFunctionId>::operator()(const ExprFunctionId& id) const noexcept
+{
+    return std::hash<std::string>()(id.name) ^ std::hash<size_t>()(id.arity);
+}
+
 ///
 std::array<ExprPtr, 2> Expr::parse(const char *text)
 {
@@ -61,8 +76,17 @@ expr_float_t Var::evalInterpreted(ExprContext& ctx) const
 
 expr_float_t Call::evalInterpreted(ExprContext& ctx) const
 {
-    // TODO: implement me...
-    return 0;
+    auto it = ctx.funcs.find(id);
+    if (it == ctx.funcs.end())
+        return 0; // inexistent function
+
+    size_t arity = id.arity;
+    std::unique_ptr<expr_float_t[]> values(new expr_float_t[arity]);
+
+    for (size_t i = 0; i < arity; ++i)
+        values[i] = args[i]->evalInterpreted(ctx);
+
+    return it->second(values.get());
 }
 
 expr_float_t Random::evalInterpreted(ExprContext& ctx) const
@@ -154,7 +178,7 @@ void Var::repr(std::ostream &out) const
 
 void Call::repr(std::ostream &out) const
 {
-    out << id << '(';
+    out << id.name << '(';
     for (size_t i = 0, n = args.size(); i < n; ++i) {
         if (i > 0)
             out << ", ";

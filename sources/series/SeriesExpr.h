@@ -8,15 +8,32 @@
 class RandomGenerator;
 
 typedef double expr_float_t;
+typedef expr_float_t (expr_function_t)(const expr_float_t *args);
 
 ///
 class Expr;
 typedef std::shared_ptr<Expr> ExprPtr;
 
+struct ExprFunctionId {
+    ExprFunctionId() = default;
+    ExprFunctionId(std::string name, size_t arity) : name(std::move(name)), arity(arity) {}
+    bool operator==(const ExprFunctionId &other) const;
+    bool operator!=(const ExprFunctionId &other) const;
+    std::string name;
+    size_t arity = 0;
+};
+
+namespace std {
+    template <> struct hash<ExprFunctionId> {
+        size_t operator()(const ExprFunctionId& id) const noexcept;
+    };
+}
+
 ///
 struct ExprContext {
     RandomGenerator* prng = nullptr;
     std::unordered_map<std::string, expr_float_t> vars;
+    std::unordered_map<ExprFunctionId, expr_function_t *> funcs;
 };
 
 ///
@@ -66,10 +83,10 @@ public:
 ///
 class Call : public Expr {
 public:
-    Call(std::string id, std::vector<ExprPtr> args) : Expr(Type::Call), id(std::move(id)), args(std::move(args)) {}
+    Call(std::string id, std::vector<ExprPtr> args) : Expr(Type::Call), id{std::move(id), args.size()}, args(std::move(args)) {}
     void repr(std::ostream &out) const override;
     expr_float_t evalInterpreted(ExprContext& ctx) const override;
-    std::string id;
+    ExprFunctionId id;
     std::vector<ExprPtr> args;
 };
 
