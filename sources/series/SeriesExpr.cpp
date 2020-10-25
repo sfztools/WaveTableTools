@@ -46,6 +46,7 @@ end3:
 end2:
     yylex_destroy(scanner);
 end1:
+
     return result.expr;
 }
 
@@ -56,6 +57,12 @@ expr_float_t Var::evalInterpreted(ExprContext& ctx) const
         return ctx.x;
     else
         return 0; // inexistent variable
+}
+
+expr_float_t Call::evalInterpreted(ExprContext& ctx) const
+{
+    // TODO: implement me...
+    return 0;
 }
 
 expr_float_t Random::evalInterpreted(ExprContext& ctx) const
@@ -143,6 +150,17 @@ expr_float_t Or::evalInterpreted(ExprContext& ctx) const
 void Var::repr(std::ostream &out) const
 {
     out << id;
+}
+
+void Call::repr(std::ostream &out) const
+{
+    out << id << '(';
+    for (size_t i = 0, n = args.size(); i < n; ++i) {
+        if (i > 0)
+            out << ", ";
+        out << *args[i];
+    }
+    out << ')';
 }
 
 void Random::repr(std::ostream &out) const

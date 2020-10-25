@@ -61,6 +61,7 @@ IDENTIFIER [_a-zA-Z][_a-zA-Z0-9]*
 "#"                   return SHARP;
 "("                   return OPEN;
 ")"                   return CLOSE;
+","                   return COMMA;
 {IDENTIFIER}          yylval->s = new std::string(yytext); return IDENTIFIER;
 {NUMBER}              yylval->n = to_number(yytext, yyextra->c_locale); return NUMBER;
 "+"                   return PLUS;

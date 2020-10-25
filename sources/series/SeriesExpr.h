@@ -23,6 +23,7 @@ class Expr : public std::enable_shared_from_this<Expr> {
 public:
     enum class Type {
         Var,
+        Call,
         Number,
         Random,
         Add,
@@ -59,6 +60,16 @@ public:
     void repr(std::ostream &out) const override;
     expr_float_t evalInterpreted(ExprContext& ctx) const override;
     std::string id;
+};
+
+///
+class Call : public Expr {
+public:
+    Call(std::string id, std::vector<ExprPtr> args) : Expr(Type::Call), id(std::move(id)), args(std::move(args)) {}
+    void repr(std::ostream &out) const override;
+    expr_float_t evalInterpreted(ExprContext& ctx) const override;
+    std::string id;
+    std::vector<ExprPtr> args;
 };
 
 ///

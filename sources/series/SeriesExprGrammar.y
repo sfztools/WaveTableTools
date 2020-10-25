@@ -12,10 +12,14 @@
   #include "SeriesExpr.h"
   #include <string>
 
+  typedef std::vector<ExprPtr> ArgList;
+  typedef std::unique_ptr<ArgList> ArgListPtr;
+
   union sval {
       Expr *e;
       double n;
       std::string *s;
+      ArgList *a;
   };
 
   struct ParserResult {
@@ -43,12 +47,27 @@
       sv.s = nullptr;
       return s;
   }
+
+  static ArgListPtr takeArgListPtr(sval &sv)
+  {
+      ArgListPtr a(sv.a);
+      sv.a = nullptr;
+      return a;
+  }
+
+  static ArgList takeArgList(sval &sv)
+  {
+      ArgList a = std::move(*sv.a);
+      sv.a = nullptr;
+      return a;
+  }
 }
 
 %destructor { delete $$.e; } expr
+%destructor { delete $$.a; } maybe_args args_rest
 %destructor { delete $$.s; } IDENTIFIER
 
-%token SEMICOLON SHARP OPEN CLOSE NUMBER IDENTIFIER INVALID END UNOP
+%token SEMICOLON SHARP OPEN CLOSE COMMA NUMBER IDENTIFIER INVALID END UNOP
 %left PLUS MINUS
 %nonassoc EQUAL NOTEQUAL LT GT LE GE
 %left TIMES DIVIDE MODULO
@@ -63,7 +82,8 @@ input2exp: SEMICOLON expr    { parser_result->expr[1].reset($2.e); $2.e = nullpt
          | %empty            { }
 
 expr : NUMBER                { $$.e = new Number($1.n); }
-     | IDENTIFIER            { $$.e = new Var(takeString($1)); }
+     | IDENTIFIER maybe_args { if (!$2.a) $$.e = new Var(takeString($1));
+                               else $$.e = new Call(takeString($1), takeArgList($2)); }
      | SHARP                 { $$.e = new Random; }
      | OPEN expr CLOSE       { $$.e = $2.e; $2.e = nullptr; }
      | PLUS expr %prec UNOP  { $$.e = $2.e; $2.e = nullptr; }
@@ -82,6 +102,15 @@ expr : NUMBER                { $$.e = new Number($1.n); }
      | expr GE expr          { $$.e = new Ge(takeExpr($1), takeExpr($3)); }
      | expr AND expr         { $$.e = new And(takeExpr($1), takeExpr($3)); }
      | expr OR expr          { $$.e = new Or(takeExpr($1), takeExpr($3)); }
+
+maybe_args : OPEN CLOSE { $$.a = new ArgList; }
+           | OPEN expr args_rest { $$.a = takeArgListPtr($3).release();
+                                   $$.a->insert($$.a->begin(), takeExpr($2)); }
+           | %empty { $$.a = nullptr; }
+
+args_rest : CLOSE { $$.a = new ArgList; }
+          | COMMA expr args_rest { $$.a = takeArgListPtr($3).release();
+                                   $$.a->insert($$.a->begin(), takeExpr($2)); }
 
 %%
 

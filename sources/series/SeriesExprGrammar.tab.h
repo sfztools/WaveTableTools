@@ -50,10 +50,14 @@ extern int yydebug;
   #include "SeriesExpr.h"
   #include <string>
 
+  typedef std::vector<ExprPtr> ArgList;
+  typedef std::unique_ptr<ArgList> ArgListPtr;
+
   union sval {
       Expr *e;
       double n;
       std::string *s;
+      ArgList *a;
   };
 
   struct ParserResult {
@@ -62,7 +66,7 @@ extern int yydebug;
 
   typedef void *yyscan_t;
 
-#line 66 "SeriesExprGrammar.tab.h"
+#line 70 "SeriesExprGrammar.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -77,25 +81,26 @@ extern int yydebug;
     SHARP = 259,                   /* SHARP  */
     OPEN = 260,                    /* OPEN  */
     CLOSE = 261,                   /* CLOSE  */
-    NUMBER = 262,                  /* NUMBER  */
-    IDENTIFIER = 263,              /* IDENTIFIER  */
-    INVALID = 264,                 /* INVALID  */
-    END = 265,                     /* END  */
-    UNOP = 266,                    /* UNOP  */
-    PLUS = 267,                    /* PLUS  */
-    MINUS = 268,                   /* MINUS  */
-    EQUAL = 269,                   /* EQUAL  */
-    NOTEQUAL = 270,                /* NOTEQUAL  */
-    LT = 271,                      /* LT  */
-    GT = 272,                      /* GT  */
-    LE = 273,                      /* LE  */
-    GE = 274,                      /* GE  */
-    TIMES = 275,                   /* TIMES  */
-    DIVIDE = 276,                  /* DIVIDE  */
-    MODULO = 277,                  /* MODULO  */
-    AND = 278,                     /* AND  */
-    OR = 279,                      /* OR  */
-    POWER = 280                    /* POWER  */
+    COMMA = 262,                   /* COMMA  */
+    NUMBER = 263,                  /* NUMBER  */
+    IDENTIFIER = 264,              /* IDENTIFIER  */
+    INVALID = 265,                 /* INVALID  */
+    END = 266,                     /* END  */
+    UNOP = 267,                    /* UNOP  */
+    PLUS = 268,                    /* PLUS  */
+    MINUS = 269,                   /* MINUS  */
+    EQUAL = 270,                   /* EQUAL  */
+    NOTEQUAL = 271,                /* NOTEQUAL  */
+    LT = 272,                      /* LT  */
+    GT = 273,                      /* GT  */
+    LE = 274,                      /* LE  */
+    GE = 275,                      /* GE  */
+    TIMES = 276,                   /* TIMES  */
+    DIVIDE = 277,                  /* DIVIDE  */
+    MODULO = 278,                  /* MODULO  */
+    AND = 279,                     /* AND  */
+    OR = 280,                      /* OR  */
+    POWER = 281                    /* POWER  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
