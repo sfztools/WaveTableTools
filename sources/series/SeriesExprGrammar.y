@@ -10,10 +10,12 @@
 
 %code requires {
   #include "SeriesExpr.h"
+  #include <string>
 
   union sval {
       Expr *e;
       double n;
+      std::string *s;
   };
 
   struct ParserResult {
@@ -33,11 +35,20 @@
       sv.e = nullptr;
       return e;
   }
+
+  static std::string takeString(sval &sv)
+  {
+      std::string s = std::move(*sv.s);
+      delete sv.s;
+      sv.s = nullptr;
+      return s;
+  }
 }
 
 %destructor { delete $$.e; } expr
+%destructor { delete $$.s; } IDENTIFIER
 
-%token SEMICOLON SHARP OPEN CLOSE NUMBER VARX INVALID END UNOP
+%token SEMICOLON SHARP OPEN CLOSE NUMBER IDENTIFIER INVALID END UNOP
 %left PLUS MINUS
 %nonassoc EQUAL NOTEQUAL LT GT LE GE
 %left TIMES DIVIDE MODULO
@@ -52,7 +63,7 @@ input2exp: SEMICOLON expr    { parser_result->expr[1].reset($2.e); $2.e = nullpt
          | %empty            { }
 
 expr : NUMBER                { $$.e = new Number($1.n); }
-     | VARX                  { $$.e = new VarX; }
+     | IDENTIFIER            { $$.e = new Var(takeString($1)); }
      | SHARP                 { $$.e = new Random; }
      | OPEN expr CLOSE       { $$.e = $2.e; $2.e = nullptr; }
      | PLUS expr %prec UNOP  { $$.e = $2.e; $2.e = nullptr; }

@@ -48,10 +48,12 @@ extern int yydebug;
 #line 11 "SeriesExprGrammar.y"
 
   #include "SeriesExpr.h"
+  #include <string>
 
   union sval {
       Expr *e;
       double n;
+      std::string *s;
   };
 
   struct ParserResult {
@@ -60,7 +62,7 @@ extern int yydebug;
 
   typedef void *yyscan_t;
 
-#line 64 "SeriesExprGrammar.tab.h"
+#line 66 "SeriesExprGrammar.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -76,7 +78,7 @@ extern int yydebug;
     OPEN = 260,                    /* OPEN  */
     CLOSE = 261,                   /* CLOSE  */
     NUMBER = 262,                  /* NUMBER  */
-    VARX = 263,                    /* VARX  */
+    IDENTIFIER = 263,              /* IDENTIFIER  */
     INVALID = 264,                 /* INVALID  */
     END = 265,                     /* END  */
     UNOP = 266,                    /* UNOP  */

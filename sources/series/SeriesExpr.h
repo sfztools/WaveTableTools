@@ -2,6 +2,7 @@
 #include <vector>
 #include <array>
 #include <memory>
+#include <string>
 #include <iosfwd>
 class RandomGenerator;
 
@@ -21,7 +22,7 @@ struct ExprContext {
 class Expr : public std::enable_shared_from_this<Expr> {
 public:
     enum class Type {
-        VarX,
+        Var,
         Number,
         Random,
         Add,
@@ -52,11 +53,12 @@ public:
 };
 
 ///
-class VarX : public Expr {
+class Var : public Expr {
 public:
-    VarX() : Expr(Type::VarX) {}
+    explicit Var(std::string id) : Expr(Type::Var), id(std::move(id)) {}
     void repr(std::ostream &out) const override;
     expr_float_t evalInterpreted(ExprContext& ctx) const override;
+    std::string id;
 };
 
 ///

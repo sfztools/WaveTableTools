@@ -107,7 +107,7 @@ enum yysymbol_kind_t
   YYSYMBOL_OPEN = 5,                       /* OPEN  */
   YYSYMBOL_CLOSE = 6,                      /* CLOSE  */
   YYSYMBOL_NUMBER = 7,                     /* NUMBER  */
-  YYSYMBOL_VARX = 8,                       /* VARX  */
+  YYSYMBOL_IDENTIFIER = 8,                 /* IDENTIFIER  */
   YYSYMBOL_INVALID = 9,                    /* INVALID  */
   YYSYMBOL_END = 10,                       /* END  */
   YYSYMBOL_UNOP = 11,                      /* UNOP  */
@@ -135,7 +135,7 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 
 /* Unqualified %code blocks.  */
-#line 26 "SeriesExprGrammar.y"
+#line 28 "SeriesExprGrammar.y"
 
   int yylex(YYSTYPE *yylvalp, YYLTYPE *yyllocp, yyscan_t scanner);
   void yyerror(YYLTYPE *yyllocp, yyscan_t unused, ParserResult *parser_result, const char *msg);
@@ -147,7 +147,15 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
       return e;
   }
 
-#line 151 "SeriesExprGrammar.tab.cpp"
+  static std::string takeString(sval &sv)
+  {
+      std::string s = std::move(*sv.s);
+      delete sv.s;
+      sv.s = nullptr;
+      return s;
+  }
+
+#line 159 "SeriesExprGrammar.tab.cpp"
 
 #ifdef short
 # undef short
@@ -516,9 +524,9 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    50,    50,    51,    52,    54,    55,    56,    57,    58,
-      59,    60,    61,    62,    63,    64,    65,    66,    67,    68,
-      69,    70,    71,    72,    73
+       0,    61,    61,    62,    63,    65,    66,    67,    68,    69,
+      70,    71,    72,    73,    74,    75,    76,    77,    78,    79,
+      80,    81,    82,    83,    84
 };
 #endif
 
@@ -535,9 +543,10 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "SEMICOLON", "SHARP",
-  "OPEN", "CLOSE", "NUMBER", "VARX", "INVALID", "END", "UNOP", "PLUS",
-  "MINUS", "EQUAL", "NOTEQUAL", "LT", "GT", "LE", "GE", "TIMES", "DIVIDE",
-  "MODULO", "AND", "OR", "POWER", "$accept", "input", "input2exp", "expr", YY_NULLPTR
+  "OPEN", "CLOSE", "NUMBER", "IDENTIFIER", "INVALID", "END", "UNOP",
+  "PLUS", "MINUS", "EQUAL", "NOTEQUAL", "LT", "GT", "LE", "GE", "TIMES",
+  "DIVIDE", "MODULO", "AND", "OR", "POWER", "$accept", "input",
+  "input2exp", "expr", YY_NULLPTR
 };
 
 static const char *
@@ -945,10 +954,16 @@ yydestruct (const char *yymsg,
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   switch (yykind)
     {
+    case YYSYMBOL_IDENTIFIER: /* IDENTIFIER  */
+#line 49 "SeriesExprGrammar.y"
+            { delete (*yyvaluep).s; }
+#line 961 "SeriesExprGrammar.tab.cpp"
+        break;
+
     case YYSYMBOL_expr: /* expr  */
-#line 38 "SeriesExprGrammar.y"
+#line 48 "SeriesExprGrammar.y"
             { delete (*yyvaluep).e; }
-#line 952 "SeriesExprGrammar.tab.cpp"
+#line 967 "SeriesExprGrammar.tab.cpp"
         break;
 
       default:
@@ -1247,145 +1262,145 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* input: expr input2exp END  */
-#line 50 "SeriesExprGrammar.y"
+#line 61 "SeriesExprGrammar.y"
                              { parser_result->expr[0].reset(yyvsp[-2].e); yyvsp[-2].e = nullptr; }
-#line 1253 "SeriesExprGrammar.tab.cpp"
+#line 1268 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 3: /* input2exp: SEMICOLON expr  */
-#line 51 "SeriesExprGrammar.y"
+#line 62 "SeriesExprGrammar.y"
                              { parser_result->expr[1].reset(yyvsp[0].e); yyvsp[0].e = nullptr; }
-#line 1259 "SeriesExprGrammar.tab.cpp"
+#line 1274 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 4: /* input2exp: %empty  */
-#line 52 "SeriesExprGrammar.y"
+#line 63 "SeriesExprGrammar.y"
                              { }
-#line 1265 "SeriesExprGrammar.tab.cpp"
+#line 1280 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 5: /* expr: NUMBER  */
-#line 54 "SeriesExprGrammar.y"
+#line 65 "SeriesExprGrammar.y"
                              { yyval.e = new Number(yyvsp[0].n); }
-#line 1271 "SeriesExprGrammar.tab.cpp"
+#line 1286 "SeriesExprGrammar.tab.cpp"
     break;
 
-  case 6: /* expr: VARX  */
-#line 55 "SeriesExprGrammar.y"
-                             { yyval.e = new VarX; }
-#line 1277 "SeriesExprGrammar.tab.cpp"
+  case 6: /* expr: IDENTIFIER  */
+#line 66 "SeriesExprGrammar.y"
+                             { yyval.e = new Var(takeString(yyvsp[0])); }
+#line 1292 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 7: /* expr: SHARP  */
-#line 56 "SeriesExprGrammar.y"
+#line 67 "SeriesExprGrammar.y"
                              { yyval.e = new Random; }
-#line 1283 "SeriesExprGrammar.tab.cpp"
+#line 1298 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 8: /* expr: OPEN expr CLOSE  */
-#line 57 "SeriesExprGrammar.y"
+#line 68 "SeriesExprGrammar.y"
                              { yyval.e = yyvsp[-1].e; yyvsp[-1].e = nullptr; }
-#line 1289 "SeriesExprGrammar.tab.cpp"
+#line 1304 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 9: /* expr: PLUS expr  */
-#line 58 "SeriesExprGrammar.y"
+#line 69 "SeriesExprGrammar.y"
                              { yyval.e = yyvsp[0].e; yyvsp[0].e = nullptr; }
-#line 1295 "SeriesExprGrammar.tab.cpp"
+#line 1310 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 10: /* expr: MINUS expr  */
-#line 59 "SeriesExprGrammar.y"
+#line 70 "SeriesExprGrammar.y"
                              { yyval.e = new Sub(ExprPtr(new Number(0)), takeExpr(yyvsp[0])); }
-#line 1301 "SeriesExprGrammar.tab.cpp"
+#line 1316 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 11: /* expr: expr PLUS expr  */
-#line 60 "SeriesExprGrammar.y"
+#line 71 "SeriesExprGrammar.y"
                              { yyval.e = new Add(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1307 "SeriesExprGrammar.tab.cpp"
+#line 1322 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 12: /* expr: expr MINUS expr  */
-#line 61 "SeriesExprGrammar.y"
+#line 72 "SeriesExprGrammar.y"
                              { yyval.e = new Sub(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1313 "SeriesExprGrammar.tab.cpp"
+#line 1328 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 13: /* expr: expr TIMES expr  */
-#line 62 "SeriesExprGrammar.y"
+#line 73 "SeriesExprGrammar.y"
                              { yyval.e = new Mul(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1319 "SeriesExprGrammar.tab.cpp"
+#line 1334 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 14: /* expr: expr DIVIDE expr  */
-#line 63 "SeriesExprGrammar.y"
+#line 74 "SeriesExprGrammar.y"
                              { yyval.e = new Div(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1325 "SeriesExprGrammar.tab.cpp"
+#line 1340 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 15: /* expr: expr MODULO expr  */
-#line 64 "SeriesExprGrammar.y"
+#line 75 "SeriesExprGrammar.y"
                              { yyval.e = new Mod(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1331 "SeriesExprGrammar.tab.cpp"
+#line 1346 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 16: /* expr: expr POWER expr  */
-#line 65 "SeriesExprGrammar.y"
+#line 76 "SeriesExprGrammar.y"
                              { yyval.e = new Pow(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1337 "SeriesExprGrammar.tab.cpp"
+#line 1352 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 17: /* expr: expr EQUAL expr  */
-#line 66 "SeriesExprGrammar.y"
+#line 77 "SeriesExprGrammar.y"
                              { yyval.e = new Eq(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1343 "SeriesExprGrammar.tab.cpp"
+#line 1358 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 18: /* expr: expr NOTEQUAL expr  */
-#line 67 "SeriesExprGrammar.y"
+#line 78 "SeriesExprGrammar.y"
                              { yyval.e = new Neq(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1349 "SeriesExprGrammar.tab.cpp"
+#line 1364 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 19: /* expr: expr LT expr  */
-#line 68 "SeriesExprGrammar.y"
+#line 79 "SeriesExprGrammar.y"
                              { yyval.e = new Lt(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1355 "SeriesExprGrammar.tab.cpp"
+#line 1370 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 20: /* expr: expr GT expr  */
-#line 69 "SeriesExprGrammar.y"
+#line 80 "SeriesExprGrammar.y"
                              { yyval.e = new Gt(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1361 "SeriesExprGrammar.tab.cpp"
+#line 1376 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 21: /* expr: expr LE expr  */
-#line 70 "SeriesExprGrammar.y"
+#line 81 "SeriesExprGrammar.y"
                              { yyval.e = new Le(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1367 "SeriesExprGrammar.tab.cpp"
+#line 1382 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 22: /* expr: expr GE expr  */
-#line 71 "SeriesExprGrammar.y"
+#line 82 "SeriesExprGrammar.y"
                              { yyval.e = new Ge(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1373 "SeriesExprGrammar.tab.cpp"
+#line 1388 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 23: /* expr: expr AND expr  */
-#line 72 "SeriesExprGrammar.y"
+#line 83 "SeriesExprGrammar.y"
                              { yyval.e = new And(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1379 "SeriesExprGrammar.tab.cpp"
+#line 1394 "SeriesExprGrammar.tab.cpp"
     break;
 
   case 24: /* expr: expr OR expr  */
-#line 73 "SeriesExprGrammar.y"
+#line 84 "SeriesExprGrammar.y"
                              { yyval.e = new Or(takeExpr(yyvsp[-2]), takeExpr(yyvsp[0])); }
-#line 1385 "SeriesExprGrammar.tab.cpp"
+#line 1400 "SeriesExprGrammar.tab.cpp"
     break;
 
 
-#line 1389 "SeriesExprGrammar.tab.cpp"
+#line 1404 "SeriesExprGrammar.tab.cpp"
 
       default: break;
     }
@@ -1584,7 +1599,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 75 "SeriesExprGrammar.y"
+#line 86 "SeriesExprGrammar.y"
 
 
 void yyerror(YYLTYPE *yyllocp, yyscan_t unused, ParserResult *parser_result, const char *msg)

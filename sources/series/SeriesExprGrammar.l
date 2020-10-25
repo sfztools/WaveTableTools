@@ -26,6 +26,7 @@
   #include <string.h>
   #include "SeriesExprGrammar.tab.h"
   #include "SeriesExprGrammarExtra.h"
+  #include <string>
 
   #if defined(_WIN32)
      #include <io.h>
@@ -51,6 +52,7 @@ DECIMAL [0-9]+
 REAL ([0-9]+)?\.[0-9]*
 EXPONENT [eE][-\+]?[0-9]+
 NUMBER ({DECIMAL}{EXPONENT}?)|({REAL}{EXPONENT}?)
+IDENTIFIER [_a-zA-Z][_a-zA-Z0-9]*
 
 %%
 
@@ -59,7 +61,7 @@ NUMBER ({DECIMAL}{EXPONENT}?)|({REAL}{EXPONENT}?)
 "#"                   return SHARP;
 "("                   return OPEN;
 ")"                   return CLOSE;
-"x"                   return VARX;
+{IDENTIFIER}          yylval->s = new std::string(yytext); return IDENTIFIER;
 {NUMBER}              yylval->n = to_number(yytext, yyextra->c_locale); return NUMBER;
 "+"                   return PLUS;
 "-"                   return MINUS;

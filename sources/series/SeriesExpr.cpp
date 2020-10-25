@@ -50,9 +50,12 @@ end1:
 }
 
 ///
-expr_float_t VarX::evalInterpreted(ExprContext& ctx) const
+expr_float_t Var::evalInterpreted(ExprContext& ctx) const
 {
-    return ctx.x;
+    if (id == "x")
+        return ctx.x;
+    else
+        return 0; // inexistent variable
 }
 
 expr_float_t Random::evalInterpreted(ExprContext& ctx) const
@@ -137,9 +140,9 @@ expr_float_t Or::evalInterpreted(ExprContext& ctx) const
 }
 
 ///
-void VarX::repr(std::ostream &out) const
+void Var::repr(std::ostream &out) const
 {
-    out << 'x';
+    out << id;
 }
 
 void Random::repr(std::ostream &out) const
