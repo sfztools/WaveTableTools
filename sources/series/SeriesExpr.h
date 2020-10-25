@@ -3,6 +3,7 @@
 #include <array>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <iosfwd>
 class RandomGenerator;
 
@@ -15,7 +16,7 @@ typedef std::shared_ptr<Expr> ExprPtr;
 ///
 struct ExprContext {
     RandomGenerator* prng = nullptr;
-    expr_float_t x = 0;
+    std::unordered_map<std::string, expr_float_t> vars;
 };
 
 ///

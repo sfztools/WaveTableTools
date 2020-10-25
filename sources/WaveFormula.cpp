@@ -142,6 +142,8 @@ void SeriesFormula::compute_spectrum(std::complex<float>* spec) const
         return;
     }
 
+    ExprContext ctx;
+
     RandomGenerator mag_prng;
     RandomGenerator phase_prng;
     mag_prng.seed(get_seed());
@@ -149,8 +151,7 @@ void SeriesFormula::compute_spectrum(std::complex<float>* spec) const
 
     spec[0] = 0.0f;
     for (unsigned i = 1; i < size / 2 + 1; ++i) {
-        ExprContext ctx;
-        ctx.x = expr_float_t(i);
+        ctx.vars["x"] = expr_float_t(i);
 
         ctx.prng = &mag_prng;
         expr_float_t mod = mag_expr->evalInterpreted(ctx);

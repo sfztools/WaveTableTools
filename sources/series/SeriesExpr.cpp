@@ -53,10 +53,10 @@ end1:
 ///
 expr_float_t Var::evalInterpreted(ExprContext& ctx) const
 {
-    if (id == "x")
-        return ctx.x;
-    else
+    auto it = ctx.vars.find(id);
+    if (it == ctx.vars.end())
         return 0; // inexistent variable
+    return it->second;
 }
 
 expr_float_t Call::evalInterpreted(ExprContext& ctx) const
