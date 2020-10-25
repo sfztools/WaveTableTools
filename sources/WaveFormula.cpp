@@ -150,18 +150,18 @@ void SeriesFormula::compute_spectrum(std::complex<float>* spec) const
     spec[0] = 0.0f;
     for (unsigned i = 1; i < size / 2 + 1; ++i) {
         ExprContext ctx;
-        ctx.x = static_cast<float>(i);
+        ctx.x = expr_float_t(i);
 
         ctx.prng = &mag_prng;
-        float mod = mag_expr->evalInterpreted(ctx);
+        expr_float_t mod = mag_expr->evalInterpreted(ctx);
 
-        float arg = 0.0;
+        expr_float_t arg = 0.0;
         if (phase_expr) {
             ctx.prng = &phase_prng;
-            arg = phase_expr->evalInterpreted(ctx) * float(M_PI * 2);
+            arg = phase_expr->evalInterpreted(ctx) * expr_float_t(M_PI * 2);
         }
 
-        spec[i] = std::polar(0.5f * mod, float(-M_PI / 2) + arg);
+        spec[i] = std::polar(expr_float_t(0.5) * mod, expr_float_t(-M_PI / 2) + arg);
     }
 }
 

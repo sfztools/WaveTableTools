@@ -50,88 +50,88 @@ end1:
 }
 
 ///
-float VarX::evalInterpreted(ExprContext& ctx) const
+expr_float_t VarX::evalInterpreted(ExprContext& ctx) const
 {
     return ctx.x;
 }
 
-float Random::evalInterpreted(ExprContext& ctx) const
+expr_float_t Random::evalInterpreted(ExprContext& ctx) const
 {
     assert(ctx.prng);
     return ctx.prng->next_float();
 }
 
-float Number::evalInterpreted(ExprContext& ctx) const
+expr_float_t Number::evalInterpreted(ExprContext& ctx) const
 {
-    return static_cast<float>(number);
+    return static_cast<expr_float_t>(number);
 }
 
-float Add::evalInterpreted(ExprContext& ctx) const
+expr_float_t Add::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) + rhs->evalInterpreted(ctx);
 }
 
-float Sub::evalInterpreted(ExprContext& ctx) const
+expr_float_t Sub::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) - rhs->evalInterpreted(ctx);
 }
 
-float Mul::evalInterpreted(ExprContext& ctx) const
+expr_float_t Mul::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) * rhs->evalInterpreted(ctx);
 }
 
-float Div::evalInterpreted(ExprContext& ctx) const
+expr_float_t Div::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) / rhs->evalInterpreted(ctx);
 }
 
-float Mod::evalInterpreted(ExprContext& ctx) const
+expr_float_t Mod::evalInterpreted(ExprContext& ctx) const
 {
     return std::fmod(lhs->evalInterpreted(ctx), rhs->evalInterpreted(ctx));
 }
 
-float Pow::evalInterpreted(ExprContext& ctx) const
+expr_float_t Pow::evalInterpreted(ExprContext& ctx) const
 {
     return std::pow(lhs->evalInterpreted(ctx), rhs->evalInterpreted(ctx));
 }
 
-float Eq::evalInterpreted(ExprContext& ctx) const
+expr_float_t Eq::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) == rhs->evalInterpreted(ctx);
 }
 
-float Neq::evalInterpreted(ExprContext& ctx) const
+expr_float_t Neq::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) != rhs->evalInterpreted(ctx);
 }
 
-float Lt::evalInterpreted(ExprContext& ctx) const
+expr_float_t Lt::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) < rhs->evalInterpreted(ctx);
 }
 
-float Gt::evalInterpreted(ExprContext& ctx) const
+expr_float_t Gt::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) > rhs->evalInterpreted(ctx);
 }
 
-float Le::evalInterpreted(ExprContext& ctx) const
+expr_float_t Le::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) <= rhs->evalInterpreted(ctx);
 }
 
-float Ge::evalInterpreted(ExprContext& ctx) const
+expr_float_t Ge::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) >= rhs->evalInterpreted(ctx);
 }
 
-float And::evalInterpreted(ExprContext& ctx) const
+expr_float_t And::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) && rhs->evalInterpreted(ctx);
 }
 
-float Or::evalInterpreted(ExprContext& ctx) const
+expr_float_t Or::evalInterpreted(ExprContext& ctx) const
 {
     return lhs->evalInterpreted(ctx) || rhs->evalInterpreted(ctx);
 }
