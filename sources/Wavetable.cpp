@@ -89,6 +89,8 @@ void Wavetables::saveToWAVFile(
         //
         writeLE32(stream, data.size());
         fwrite(data.data(), 1, data.size(), stream);
+        if (data.size() & 1)
+            fputc('\0', stream);
     }
 
     // extra chunk
@@ -96,6 +98,8 @@ void Wavetables::saveToWAVFile(
         fwrite(chunkId, 1, 4, stream);
         writeLE32(stream, chunkSize);
         fwrite(chunkData, 1, chunkSize, stream);
+        if (chunkSize & 1)
+            fputc('\0', stream);
     }
 
     off_t riffEnd = ftell(stream);

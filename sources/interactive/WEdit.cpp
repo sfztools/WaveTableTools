@@ -774,7 +774,7 @@ static bool load_chunk(FILE *fh, SaveFileBufferedData &file_data)
 
     while (fread(magic, 1, 4, fh) == 4 && memcmp(magic, extra_chunk_id, 4)) {
         uint32_t size;
-        if (!fread_u32(size) || fseek(fh, size, SEEK_CUR) != 0)
+        if (!fread_u32(size) || fseek(fh, size + (size & 1), SEEK_CUR) != 0)
             return false;
     }
 
